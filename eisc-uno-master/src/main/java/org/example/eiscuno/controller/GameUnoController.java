@@ -52,6 +52,7 @@ public class GameUnoController {
 
         threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView);
         threadPlayMachine.start();
+        machinePlayer.printCardsPlayer();
     }
 
     /**
@@ -138,7 +139,14 @@ public class GameUnoController {
      */
     @FXML
     void onHandleTakeCard(ActionEvent event) {
-        // Implement logic to take a card here
+        if (!deck.isEmpty()) {
+            Card newCard = deck.takeCard();
+            humanPlayer.addCard(newCard);
+            printCardsHumanPlayer();
+        } else {
+            System.out.println("No hay más cartas en el mazo.");
+        }
+        machinePlayer.printCardsPlayer();
     }
 
     /**
@@ -148,6 +156,14 @@ public class GameUnoController {
      */
     @FXML
     void onHandleUno(ActionEvent event) {
-        // Implement logic to handle Uno event here
+        if (humanPlayer.getCardsPlayer().size() == 1) {
+            System.out.println("¡UNO!");
+            // Aquí puedes añadir lógica adicional si hay reglas específicas para cuando se dice "UNO"
+        } else {
+            System.out.println("No puedes decir 'UNO' porque no tienes exactamente una carta.");
+            // Penalización: por ejemplo, el jugador debe tomar 2 cartas
+            gameUno.eatCard(humanPlayer, 2);
+            printCardsHumanPlayer();
+        }
     }
 }

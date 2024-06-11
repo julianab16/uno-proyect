@@ -1,5 +1,6 @@
 package org.example.eiscuno.model.game;
 
+import javafx.scene.control.Alert;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.player.Player;
@@ -38,11 +39,8 @@ public class GameUno implements IGameUno {
     @Override
     public void startGame() {
         for (int i = 0; i < 10; i++) {
-            if (i < 5) {
-                humanPlayer.addCard(this.deck.takeCard());
-            } else {
-                machinePlayer.addCard(this.deck.takeCard());
-            }
+            humanPlayer.addCard(this.deck.takeCard());
+            machinePlayer.addCard(this.deck.takeCard());
         }
     }
 
@@ -54,19 +52,29 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void eatCard(Player player, int numberOfCards) {
-        for (int i = 0; i < numberOfCards; i++) {
+        for (int i = 0; i < 1; i++) {
             player.addCard(this.deck.takeCard());
         }
     }
 
-    /**
-     * Places a card on the table during the game.
-     *
-     * @param card The card to be placed on the table.
-     */
     @Override
     public void playCard(Card card) {
+        // Determinar el tipo de jugador que está jugando la carta
+        String playerType = humanPlayer.getTypePlayer(); // Por ejemplo, asumiendo que es el jugador humano
+
+        // Agregar la carta a la mesa
         this.table.addCardOnTheTable(card);
+
+        // Realizar acciones posteriores al movimiento
+        postMoveActions(playerType);
+
+        // Imprimir las cartas del jugador humano
+        System.out.println("Tus cartas:");
+        humanPlayer.printCardsPlayer();
+
+        // Imprimir las cartas del jugador máquina
+        System.out.println("Cartas de la máquina:");
+        machinePlayer.printCardsPlayer();
     }
 
     /**
@@ -111,4 +119,71 @@ public class GameUno implements IGameUno {
     public Boolean isGameOver() {
         return null;
     }
+
+    /**
+     * Verifica si una carta puede ser jugada según las reglas del juego.
+     *
+     * @param card La carta que se quiere jugar.
+     * @return true si la carta puede ser jugada, false de lo contrario.
+     */
+    public boolean canPlayCard(Card card) {
+        Card topCard = table.getTopCard();
+        return card.getColor().equals(topCard.getColor()) ||
+                card.getValue().equals(topCard.getValue()) ||
+                card.isWildCard();
+    }
+    /**
+     * Verifica si la partida ha terminado, es decir, si alguno de los jugadores ha ganado.
+     * Muestra una alerta si hay un ganador.
+     */
+    /**
+     * Verifica si un jugador ha ganado después de jugar una carta.
+     *
+     * @param player El jugador cuya mano se verificará.
+     * @return true si el jugador ha ganado, false de lo contrario.
+     */
+    private boolean checkWin(Player player) {
+        return player.getCardsPlayer().isEmpty();
+    }
+
+    /**
+     * Verifica si un jugador ha ganado después de jugar una carta.
+     *
+     * @param playerType El tipo de jugador que realizó el movimiento.
+     */
+    private void postMoveActions(String playerType) {
+        if (playerType.equals(humanPlayer.getTypePlayer())) {
+            if (humanPlayer.getCardsPlayer().isEmpty()) {
+                System.out.println("¡Has ganado!");
+            }
+        } else if (playerType.equals(machinePlayer.getTypePlayer())) {
+            if (machinePlayer.getCardsPlayer().isEmpty()) {
+                System.out.println("La máquina ha ganado!");
+            }
+        }
+    }
+
+    /**
+     * Places a card on the table during the game.
+     *
+     * @param player El jugador que juega la carta.
+     * @param card   The card to be placed on the table.
+     */
+
+
+
+    /**
+     * Muestra una alerta con el título y el mensaje especificados.
+     *
+     * @param title   El título de la alerta.
+     * @param message El mensaje de la alerta.
+     */
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }

@@ -38,4 +38,11 @@ public class Table {
         }
         return this.cardsTable.get(this.cardsTable.size()-1);
     }
+    public Card getTopCard() {
+        if (!cardsTable.isEmpty()) {
+            return cardsTable.get(cardsTable.size() - 1);
+        } else {
+            return null;
+        }
+    }
 }

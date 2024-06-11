@@ -34,10 +34,20 @@ public class ThreadPlayMachine extends Thread {
     }
 
     private void putCardOnTheTable(){
-        int index = (int) (Math.random() * machinePlayer.getCardsPlayer().size());
-        Card card = machinePlayer.getCard(index);
-        table.addCardOnTheTable(card);
-        tableImageView.setImage(card.getImage());
+        Card topCard = table.getCurrentCardOnTheTable();
+        String currentColor = topCard.getColor();
+        String currentValue = topCard.getValue();
+
+        Card playableCard = machinePlayer.findPlayableCard(currentColor, currentValue);
+
+        if (playableCard != null) {
+            table.addCardOnTheTable(playableCard);
+            tableImageView.setImage(playableCard.getImage());
+            machinePlayer.getCardsPlayer().remove(playableCard);
+        } else {
+            System.out.println("No playable card found, drawing a new card...");
+            // Lógica para sacar una nueva carta no incluida aquí
+        }
     }
 
     public void setHasPlayerPlayed(boolean hasPlayerPlayed) {

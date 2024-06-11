@@ -34,34 +34,26 @@ public class Deck {
                     cardEnum.name().startsWith("TWO_WILD_DRAW_") ||
                     cardEnum.name().equals("FOUR_WILD_DRAW") ||
                     cardEnum.name().equals("WILD")) {
-                Card card = new Card(cardEnum.getFilePath(), getCardValue(cardEnum.name()), getCardColor(cardEnum.name()));
-                deckOfCards.push(card);
+
+                String value = getCardValue(cardEnum.name());
+                String color = getCardColor(cardEnum.name());
+
+                if (value != null && color != null) {
+                    Card card = new Card(cardEnum.getFilePath(), value, color);
+                    deckOfCards.push(card);
+                } else {
+                    System.err.println("Invalid card configuration: " + cardEnum.name());
+                }
             }
         }
         Collections.shuffle(deckOfCards);
     }
 
     private String getCardValue(String name) {
-        if (name.endsWith("0")){
-            return "0";
-        } else if (name.endsWith("1")){
-            return "1";
-        } else if (name.endsWith("2")){
-            return "2";
-        } else if (name.endsWith("3")){
-            return "3";
-        } else if (name.endsWith("4")){
-            return "4";
-        } else if (name.endsWith("5")){
-            return "5";
-        } else if (name.endsWith("6")){
-            return "6";
-        } else if (name.endsWith("7")){
-            return "7";
-        } else if (name.endsWith("8")){
-            return "8";
-        } else if (name.endsWith("9")){
-            return "9";
+        if (name.matches(".*_[0-9]$")) {
+            return name.substring(name.length() - 1);
+        } else if (name.endsWith("SKIP") || name.endsWith("RESERVE") || name.endsWith("WILD_DRAW") || name.equals("FOUR_WILD_DRAW") || name.equals("WILD")) {
+            return name;
         } else {
             return null;
         }
