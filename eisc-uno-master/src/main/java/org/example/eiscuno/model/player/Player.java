@@ -83,7 +83,6 @@ public class Player implements IPlayer {
         return null;
     }
     public void printCardsPlayer() {
-        System.out.println("Cartas de la máquina:");
         for (Card card : this.cardsPlayer) {
             System.out.println(card);
         }

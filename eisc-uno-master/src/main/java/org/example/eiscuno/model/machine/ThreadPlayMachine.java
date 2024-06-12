@@ -27,6 +27,7 @@ public class ThreadPlayMachine extends Thread {
                     e.printStackTrace();
                 }
                 // Aqui iria la logica de colocar la carta
+
                 putCardOnTheTable();
                 hasPlayerPlayed = false;
             }

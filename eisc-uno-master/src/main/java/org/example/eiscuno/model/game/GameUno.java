@@ -3,6 +3,7 @@ package org.example.eiscuno.model.game;
 import javafx.scene.control.Alert;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
+import org.example.eiscuno.model.machine.TheardGameOver;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 
@@ -16,6 +17,8 @@ public class GameUno implements IGameUno {
     private Player machinePlayer;
     private Deck deck;
     private Table table;
+    TheardGameOver theardGameOver = new TheardGameOver();
+
 
     /**
      * Constructs a new GameUno instance.
@@ -75,6 +78,11 @@ public class GameUno implements IGameUno {
         // Imprimir las cartas del jugador máquina
         System.out.println("Cartas de la máquina:");
         machinePlayer.printCardsPlayer();
+
+        gameOver(humanPlayer);
+        gameOver(machinePlayer);
+
+        theardGameOver.run();
     }
 
     /**
@@ -117,7 +125,12 @@ public class GameUno implements IGameUno {
      */
     @Override
     public Boolean isGameOver() {
+
         return null;
+    }
+
+    public void gameOver (Player player){
+        theardGameOver.setPlayer(player);
     }
 
     /**
