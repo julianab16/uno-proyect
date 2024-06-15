@@ -1,7 +1,9 @@
 package org.example.eiscuno.model.machine;
 
+import javafx.event.ActionEvent;
 import javafx.scene.image.ImageView;
 import org.example.eiscuno.model.card.Card;
+import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 
@@ -10,6 +12,7 @@ public class ThreadPlayMachine extends Thread {
     private Player machinePlayer;
     private ImageView tableImageView;
     private volatile boolean hasPlayerPlayed;
+    private Deck deck;
 
     public ThreadPlayMachine(Table table, Player machinePlayer, ImageView tableImageView) {
         this.table = table;
@@ -27,7 +30,6 @@ public class ThreadPlayMachine extends Thread {
                     e.printStackTrace();
                 }
                 // Aqui iria la logica de colocar la carta
-
                 putCardOnTheTable();
                 hasPlayerPlayed = false;
             }
@@ -49,6 +51,12 @@ public class ThreadPlayMachine extends Thread {
             System.out.println("No playable card found, drawing a new card...");
             // Lógica para sacar una nueva carta no incluida aquí
         }
+    }
+
+    public void eatCard() {
+        machinePlayer.addCard(deck.takeCard());
+        System.out.println("La maquina agrego uan carta");
+        machinePlayer.printCardsPlayer();
     }
 
     public void setHasPlayerPlayed(boolean hasPlayerPlayed) {

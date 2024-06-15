@@ -1,11 +1,12 @@
 package org.example.eiscuno.model.game;
 
 import javafx.scene.control.Alert;
+import org.example.eiscuno.controller.GameUnoController;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
-import org.example.eiscuno.model.machine.TheardGameOver;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
+import org.example.eiscuno.view.GameUnoStage;
 
 /**
  * Represents a game of Uno.
@@ -17,8 +18,7 @@ public class GameUno implements IGameUno {
     private Player machinePlayer;
     private Deck deck;
     private Table table;
-    TheardGameOver theardGameOver = new TheardGameOver();
-
+    private GameUnoController gameUnoController;
 
     /**
      * Constructs a new GameUno instance.
@@ -41,7 +41,7 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void startGame() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             humanPlayer.addCard(this.deck.takeCard());
             machinePlayer.addCard(this.deck.takeCard());
         }
@@ -58,12 +58,14 @@ public class GameUno implements IGameUno {
         for (int i = 0; i < 1; i++) {
             player.addCard(this.deck.takeCard());
         }
+        gameUnoController.printCardsHumanPlayer();
+        System.out.println("comiste dso cartas");
     }
 
     @Override
     public void playCard(Card card) {
         // Determinar el tipo de jugador que está jugando la carta
-        String playerType = humanPlayer.getTypePlayer(); // Por ejemplo, asumiendo que es el jugador humano
+        String playerType = humanPlayer.getTypePlayer();
 
         // Agregar la carta a la mesa
         this.table.addCardOnTheTable(card);
@@ -71,18 +73,14 @@ public class GameUno implements IGameUno {
         // Realizar acciones posteriores al movimiento
         postMoveActions(playerType);
 
-        // Imprimir las cartas del jugador humano
-        System.out.println("Tus cartas:");
-        humanPlayer.printCardsPlayer();
-
         // Imprimir las cartas del jugador máquina
-        System.out.println("Cartas de la máquina:");
+        System.out.println(" Cartas de la máquina: ");
         machinePlayer.printCardsPlayer();
 
-        gameOver(humanPlayer);
-        gameOver(machinePlayer);
+        // Imprimir las cartas del jugador humano
+        System.out.println(" Tus cartas: ");
+        humanPlayer.printCardsPlayer();
 
-        theardGameOver.run();
     }
 
     /**
@@ -114,7 +112,6 @@ public class GameUno implements IGameUno {
         for (int i = 0; i < numVisibleCards; i++) {
             cards[i] = this.humanPlayer.getCard(posInitCardToShow + i);
         }
-
         return cards;
     }
 
@@ -125,12 +122,8 @@ public class GameUno implements IGameUno {
      */
     @Override
     public Boolean isGameOver() {
-
+        GameUnoStage.deleteInstance();
         return null;
-    }
-
-    public void gameOver (Player player){
-        theardGameOver.setPlayer(player);
     }
 
     /**
@@ -167,11 +160,15 @@ public class GameUno implements IGameUno {
     private void postMoveActions(String playerType) {
         if (playerType.equals(humanPlayer.getTypePlayer())) {
             if (humanPlayer.getCardsPlayer().isEmpty()) {
+                showAlert("GANADOR", "Ha ganado!");
                 System.out.println("¡Has ganado!");
+                isGameOver();
             }
         } else if (playerType.equals(machinePlayer.getTypePlayer())) {
             if (machinePlayer.getCardsPlayer().isEmpty()) {
+                showAlert("GAME OVER", "La maquina ha ganado!");
                 System.out.println("La máquina ha ganado!");
+                isGameOver();
             }
         }
     }
@@ -191,7 +188,7 @@ public class GameUno implements IGameUno {
      * @param title   El título de la alerta.
      * @param message El mensaje de la alerta.
      */
-    private void showAlert(String title, String message) {
+    public void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);

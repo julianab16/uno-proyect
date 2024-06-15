@@ -18,7 +18,6 @@ public class Player implements IPlayer {
         this.cardsPlayer = new ArrayList<Card>();
         this.typePlayer = typePlayer;
     }
-    ;
 
     /**
      * Adds a card to the player's hand.
@@ -48,6 +47,8 @@ public class Player implements IPlayer {
     @Override
     public void removeCard(int index) {
         cardsPlayer.remove(index);
+
+        System.out.println("removiste una cara"+index);
     }
 
     /**
