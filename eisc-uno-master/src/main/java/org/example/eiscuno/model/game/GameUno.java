@@ -66,17 +66,19 @@ public class GameUno implements IGameUno {
     public void playCard(Card card) {
         // Determinar el tipo de jugador que está jugando la carta
         String playerType = humanPlayer.getTypePlayer();
+        String playerMachime = machinePlayer.getTypePlayer();
 
         // Agregar la carta a la mesa
         this.table.addCardOnTheTable(card);
 
         // Realizar acciones posteriores al movimiento
         postMoveActions(playerType);
+        postMoveActions(playerMachime);
 
         // Imprimir las cartas del jugador máquina
         System.out.println(" Cartas de la máquina: ");
         machinePlayer.printCardsPlayer();
-
+        System.out.println(" ");
         // Imprimir las cartas del jugador humano
         System.out.println(" Tus cartas: ");
         humanPlayer.printCardsPlayer();
