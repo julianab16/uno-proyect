@@ -49,7 +49,7 @@ public class GameUnoController {
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
         t.start();
 
-        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView);
+        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView, this.deck);
         threadPlayMachine.start();
     }
 
@@ -83,9 +83,7 @@ public class GameUnoController {
                     threadPlayMachine.setHasPlayerPlayed(true);
                     gameUno.playCard(card);
                     printCardsHumanPlayer();
-
                     primeraCartaPuesta = true;
-                    System.out.println(primeraCartaPuesta);
                 } else if (gameUno.canPlayCard(card)) {
                     tableImageView.setImage(card.getImage());
                     humanPlayer.removeCard(findPosCardsHumanPlayer(card));

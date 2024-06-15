@@ -58,7 +58,6 @@ public class GameUno implements IGameUno {
         for (int i = 0; i < 1; i++) {
             player.addCard(this.deck.takeCard());
         }
-        gameUnoController.printCardsHumanPlayer();
         System.out.println("comiste dso cartas");
     }
 
@@ -82,7 +81,6 @@ public class GameUno implements IGameUno {
         // Imprimir las cartas del jugador humano
         System.out.println(" Tus cartas: ");
         humanPlayer.printCardsPlayer();
-
     }
 
     /**
