@@ -1,13 +1,10 @@
 package org.example.eiscuno.model.machine;
 
-import javafx.event.ActionEvent;
 import javafx.scene.image.ImageView;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
-import org.example.eiscuno.model.game.GameUno;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
-
 
 public class ThreadPlayMachine extends Thread {
     private Table table;
@@ -53,21 +50,26 @@ public class ThreadPlayMachine extends Thread {
         } else {
             // Lógica para sacar una nueva carta no incluida aquí
             eatCardMachine();
-            System.out.println("Turno del jugador");
         }
+        unoMachine();
     }
 
     void eatCardMachine() {
         if (!deck.isEmpty()) {
             Card newCard = deck.takeCard();
             machinePlayer.addCard(newCard);
-            System.out.println("La maquina comio una carta");
+            System.out.println("La maquina comio una carta, Turno del jugador");
 
         } else {
             System.out.println("No hay más cartas en el mazo.");
         }
     }
 
+    public void unoMachine() {
+        if (machinePlayer.getCardsPlayer().size() == 1) {
+            System.out.println("La maquina dijo ¡UNO!");
+        }
+    }
     public void setHasPlayerPlayed(boolean hasPlayerPlayed) {
         this.hasPlayerPlayed = hasPlayerPlayed;
     }

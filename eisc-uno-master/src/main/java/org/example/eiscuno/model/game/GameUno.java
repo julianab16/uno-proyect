@@ -13,12 +13,10 @@ import org.example.eiscuno.view.GameUnoStage;
  * This class manages the game logic and interactions between players, deck, and the table.
  */
 public class GameUno implements IGameUno {
-
     private Player humanPlayer;
     private Player machinePlayer;
     private Deck deck;
     private Table table;
-    private GameUnoController gameUnoController;
 
     /**
      * Constructs a new GameUno instance.
@@ -58,9 +56,12 @@ public class GameUno implements IGameUno {
         for (int i = 0; i < 1; i++) {
             player.addCard(this.deck.takeCard());
         }
-        System.out.println("comiste dso cartas");
     }
-
+    /**
+     * Places a card on the table during the game.
+     *
+     * @param card The card to be placed on the table.
+     */
     @Override
     public void playCard(Card card) {
         // Determinar el tipo de jugador que está jugando la carta
@@ -77,10 +78,11 @@ public class GameUno implements IGameUno {
         // Imprimir las cartas del jugador máquina
         System.out.println(" Cartas de la máquina: ");
         machinePlayer.printCardsPlayer();
-        System.out.println(" ");
+
         // Imprimir las cartas del jugador humano
         System.out.println(" Tus cartas: ");
         humanPlayer.printCardsPlayer();
+        System.out.println(" ");
     }
 
     /**
@@ -89,11 +91,15 @@ public class GameUno implements IGameUno {
      * @param playerWhoSang The player who shouted "Uno".
      */
     @Override
-    public void haveSungOne(String playerWhoSang) {
+    public void haveSingOne(String playerWhoSang) {
         if (playerWhoSang.equals("HUMAN_PLAYER")) {
             machinePlayer.addCard(this.deck.takeCard());
+            System.out.println("La maquina comio una carta");
         } else {
             humanPlayer.addCard(this.deck.takeCard());
+            System.out.println("El jugador comio una carta");
+            System.out.println(" Tus cartas: ");
+            humanPlayer.printCardsPlayer();
         }
     }
 
@@ -138,10 +144,7 @@ public class GameUno implements IGameUno {
                 card.getValue().equals(topCard.getValue()) ||
                 card.isWildCard();
     }
-    /**
-     * Verifica si la partida ha terminado, es decir, si alguno de los jugadores ha ganado.
-     * Muestra una alerta si hay un ganador.
-     */
+
     /**
      * Verifica si un jugador ha ganado después de jugar una carta.
      *
@@ -172,15 +175,6 @@ public class GameUno implements IGameUno {
             }
         }
     }
-
-    /**
-     * Places a card on the table during the game.
-     *
-     * @param player El jugador que juega la carta.
-     * @param card   The card to be placed on the table.
-     */
-
-
 
     /**
      * Muestra una alerta con el título y el mensaje especificados.

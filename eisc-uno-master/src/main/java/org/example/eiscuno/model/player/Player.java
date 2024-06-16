@@ -47,8 +47,6 @@ public class Player implements IPlayer {
     @Override
     public void removeCard(int index) {
         cardsPlayer.remove(index);
-
-        System.out.println("removiste una cara"+index);
     }
 
     /**

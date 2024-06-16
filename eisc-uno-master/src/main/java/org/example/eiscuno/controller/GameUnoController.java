@@ -11,16 +11,15 @@ import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.game.GameUno;
 import org.example.eiscuno.model.machine.ThreadPlayMachine;
 import org.example.eiscuno.model.machine.ThreadSingUNOMachine;
+import org.example.eiscuno.model.machine.ThreadSingUNOMachineI;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.view.GameUnoStage;
 
-import java.io.IOException;
-
 /**
  * Controller class for the Uno game.
  */
-public class GameUnoController {
+public class GameUnoController implements ThreadSingUNOMachineI {
     @FXML
     private GridPane gridPaneCardsPlayer;
     @FXML
@@ -33,8 +32,11 @@ public class GameUnoController {
     private int posInitCardToShow;
     private ThreadSingUNOMachine threadSingUNOMachine;
     private ThreadPlayMachine threadPlayMachine;
-
     private boolean primeraCartaPuesta = false;
+    private long machineTime;
+    private long playerTime;
+    private boolean machineSaidUno;
+    private boolean playerSaidUno;
 
     /**
      * Initializes the controller.
@@ -45,7 +47,7 @@ public class GameUnoController {
         this.gameUno.startGame();
         printCardsHumanPlayer();
 
-        threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer());
+        threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer(),this);
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
         t.start();
 
@@ -84,12 +86,19 @@ public class GameUnoController {
                     gameUno.playCard(card);
                     printCardsHumanPlayer();
                     primeraCartaPuesta = true;
+
+                    System.out.println(" Tus cartas: ");
+                    humanPlayer.printCardsPlayer();
+
                 } else if (gameUno.canPlayCard(card)) {
                     tableImageView.setImage(card.getImage());
                     humanPlayer.removeCard(findPosCardsHumanPlayer(card));
                     threadPlayMachine.setHasPlayerPlayed(true);
                     gameUno.playCard(card);
                     printCardsHumanPlayer();
+
+                    System.out.println(" Tus cartas: ");
+                    humanPlayer.printCardsPlayer();
 
                 }
                 else {
@@ -153,10 +162,11 @@ public class GameUnoController {
             Card newCard = deck.takeCard();
             humanPlayer.addCard(newCard);
             printCardsHumanPlayer();
+            System.out.println(" Tus cartas: ");
+            humanPlayer.printCardsPlayer();
         } else {
             System.out.println("No hay más cartas en el mazo.");
         }
-        machinePlayer.printCardsPlayer();
     }
 
     /**
@@ -167,18 +177,49 @@ public class GameUnoController {
     @FXML
     void onHandleUno(ActionEvent event) {
         if (humanPlayer.getCardsPlayer().size() == 1) {
-            System.out.println("¡UNO!");
+            System.out.println("El jugador dijo ¡UNO!");
+            playerTime = System.currentTimeMillis();
+            playerSaidUno = true;
+            checkUno();
             // Aquí puedes añadir lógica adicional si hay reglas específicas para cuando se dice "UNO"
         } else {
-            System.out.println("No puedes decir 'UNO' porque no tienes exactamente una carta.");
+            gameUno.showAlert("Error", "No puedes decir 'UNO' porque no tienes exactamente una carta");
             // Penalización: por ejemplo, el jugador debe tomar 2 cartas
-            gameUno.eatCard(humanPlayer, 2);
+            gameUno.eatCard(humanPlayer, 1);
             printCardsHumanPlayer();
+            System.out.println(" Tus cartas: ");
+            humanPlayer.printCardsPlayer();
         }
+    }
+    @Override
+    public void onMachineSaysUno()  {
+        machineTime = System.currentTimeMillis();
+        machineSaidUno = true;
+        checkUno();
     }
 
     @FXML
     void OnHnableExitButton(ActionEvent event) {
         GameUnoStage.deleteInstance();
+    }
+
+    private void checkUno() {
+        System.out.println("Maquina lo dijo en "+machineTime);
+        System.out.println("jugador lo dijo en "+playerTime);
+        if (machineSaidUno && playerSaidUno) {
+            if (machineTime < playerTime) {
+                System.out.println("¡Máquina dijo UNO más rápido! Jugador debe comer una carta.");
+                String playerMachime = machinePlayer.getTypePlayer();
+                gameUno.haveSingOne(playerMachime);
+                printCardsHumanPlayer();
+            } else {
+                System.out.println("¡Jugador dijo UNO más rápido!");
+            }
+            machineTime = 0;
+            playerTime = 0;
+            machineSaidUno = false;
+            playerSaidUno = false;
+            threadSingUNOMachine.setCondition(true);
+        }
     }
 }
