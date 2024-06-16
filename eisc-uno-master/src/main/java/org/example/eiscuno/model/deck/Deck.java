@@ -14,8 +14,6 @@ public class Deck {
     private Stack<Card> deckOfCards;
     private Stack<Card> discardPile;
     public AlertBox alertBox = new AlertBox();
-
-
     /**
      * Constructs a new deck of Uno cards and initializes it.
      */

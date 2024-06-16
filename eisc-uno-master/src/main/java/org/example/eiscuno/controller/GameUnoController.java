@@ -104,8 +104,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
 
                     deck.discardCard(card);
                     Card currentCard = card;
-                }
-                else {
+                } else {
                     alertBox.showMessageError("Error", "Carta invalida. Intenta otra vez.");
                 }
             });
@@ -168,6 +167,8 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             printCardsHumanPlayer();
             System.out.println(" Tus cartas: ");
             humanPlayer.printCardsPlayer();
+            threadPlayMachine.setHasPlayerPlayed(true);
+            System.out.println("Turno de la maquina");
         } else {
             deck.refillDeckFromDiscardPile();
             alertBox.showMessage("Mazo","El mazo se acabo!\nPero fue llenado nuevamente.");

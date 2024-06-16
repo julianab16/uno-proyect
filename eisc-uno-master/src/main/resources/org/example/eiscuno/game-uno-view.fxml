@@ -25,7 +25,7 @@
             <left>
                 <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <children>
-                        <Button contentDisplay="GRAPHIC_ONLY" layoutX="50.0" layoutY="30.0" mnemonicParsing="false" onAction="#onHandleTakeCard" prefHeight="149.0" prefWidth="100.0" style="-fx-background-color: transparent;" text="Baraja">
+                        <Button contentDisplay="GRAPHIC_ONLY" layoutX="51.0" layoutY="38.0" mnemonicParsing="false" onAction="#onHandleTakeCard" prefHeight="149.0" prefWidth="100.0" style="-fx-background-color: transparent;" text="Baraja">
                             <graphic>
                                 <ImageView fitHeight="174.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -40,7 +40,7 @@
                 </Pane>
             </left>
             <right>
-                <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <Pane prefHeight="237.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <children>
                         <Button contentDisplay="GRAPHIC_ONLY" layoutY="78.0" mnemonicParsing="false" onAction="#onHandleUno" prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: transparent;" text="UNO">
                             <graphic>
@@ -57,9 +57,9 @@
                 </Pane>
             </right>
             <center>
-                <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <Pane prefHeight="237.0" prefWidth="462.0" BorderPane.alignment="CENTER">
                     <children>
-                        <ImageView fx:id="tableImageView" fitHeight="171.0" fitWidth="147.0" layoutX="174.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="tableImageView" fitHeight="171.0" fitWidth="147.0" layoutX="158.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true" />
                     </children>
                 </Pane>
             </center>
@@ -154,11 +154,11 @@
                                 </ImageView>
                             </graphic>
                         </Button>
-                        <GridPane fx:id="gridPaneCardsPlayer" prefHeight="74.0" prefWidth="400.0">
+                        <GridPane fx:id="gridPaneCardsPlayer" prefHeight="108.0" prefWidth="400.0">
                             <columnConstraints>
                                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="99.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="103.0" minWidth="10.0" prefWidth="101.0" />
                                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
                             <rowConstraints>
