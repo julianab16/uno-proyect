@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.game.GameUno;
@@ -37,6 +38,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     private long playerTime;
     private boolean machineSaidUno;
     private boolean playerSaidUno;
+    public AlertBox alertBox = new AlertBox();
 
     /**
      * Initializes the controller.
@@ -51,7 +53,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
         t.start();
 
-        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView, this.deck);
+        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView, this.deck, this.gameUno);
         threadPlayMachine.start();
     }
 
@@ -100,9 +102,11 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                     System.out.println(" Tus cartas: ");
                     humanPlayer.printCardsPlayer();
 
+                    deck.discardCard(card);
+                    Card currentCard = card;
                 }
                 else {
-                    gameUno.showAlert("Error", "Carta invalida");
+                    alertBox.showMessageError("Error", "Carta invalida. Intenta otra vez.");
                 }
             });
 
@@ -165,6 +169,8 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             System.out.println(" Tus cartas: ");
             humanPlayer.printCardsPlayer();
         } else {
+            deck.refillDeckFromDiscardPile();
+            alertBox.showMessage("Mazo","El mazo se acabo!\nPero fue llenado nuevamente.");
             System.out.println("No hay más cartas en el mazo.");
         }
     }
@@ -183,7 +189,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             checkUno();
             // Aquí puedes añadir lógica adicional si hay reglas específicas para cuando se dice "UNO"
         } else {
-            gameUno.showAlert("Error", "No puedes decir 'UNO' porque no tienes exactamente una carta");
+            alertBox.showMessageError("Error", "No puedes decir 'UNO' porque no tienes exactamente una carta. Toma una carta como penitencia. :(");
             // Penalización: por ejemplo, el jugador debe tomar 2 cartas
             gameUno.eatCard(humanPlayer, 1);
             printCardsHumanPlayer();

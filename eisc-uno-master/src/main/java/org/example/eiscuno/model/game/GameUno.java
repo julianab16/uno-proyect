@@ -1,7 +1,6 @@
 package org.example.eiscuno.model.game;
 
-import javafx.scene.control.Alert;
-import org.example.eiscuno.controller.GameUnoController;
+import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.player.Player;
@@ -17,6 +16,8 @@ public class GameUno implements IGameUno {
     private Player machinePlayer;
     private Deck deck;
     private Table table;
+    public AlertBox alertBox = new AlertBox();
+
 
     /**
      * Constructs a new GameUno instance.
@@ -43,6 +44,8 @@ public class GameUno implements IGameUno {
             humanPlayer.addCard(this.deck.takeCard());
             machinePlayer.addCard(this.deck.takeCard());
         }
+        Card currentCard = deck.takeCard();
+        deck.discardCard(currentCard);
     }
 
     /**
@@ -163,31 +166,16 @@ public class GameUno implements IGameUno {
     private void postMoveActions(String playerType) {
         if (playerType.equals(humanPlayer.getTypePlayer())) {
             if (humanPlayer.getCardsPlayer().isEmpty()) {
-                showAlert("GANADOR", "Ha ganado!");
+                alertBox.showMessage("GANADOR", "Ha ganado!");
                 System.out.println("¡Has ganado!");
                 isGameOver();
             }
         } else if (playerType.equals(machinePlayer.getTypePlayer())) {
             if (machinePlayer.getCardsPlayer().isEmpty()) {
-                showAlert("GAME OVER", "La maquina ha ganado!");
+                alertBox.showMessage("GAME OVER", "La maquina ha ganado!");
                 System.out.println("La máquina ha ganado!");
                 isGameOver();
             }
         }
     }
-
-    /**
-     * Muestra una alerta con el título y el mensaje especificados.
-     *
-     * @param title   El título de la alerta.
-     * @param message El mensaje de la alerta.
-     */
-    public void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
 }

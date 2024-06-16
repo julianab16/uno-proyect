@@ -1,8 +1,10 @@
 package org.example.eiscuno.model.machine;
 
 import javafx.scene.image.ImageView;
+import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
+import org.example.eiscuno.model.game.GameUno;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 
@@ -12,13 +14,15 @@ public class ThreadPlayMachine extends Thread {
     private ImageView tableImageView;
     private volatile boolean hasPlayerPlayed;
     private Deck deck;
-
-    public ThreadPlayMachine(Table table, Player machinePlayer, ImageView tableImageView, Deck deck) {
+    private GameUno gameUno;
+    public AlertBox alertBox = new AlertBox();
+    public ThreadPlayMachine(Table table, Player machinePlayer, ImageView tableImageView, Deck deck, GameUno gameUno) {
         this.table = table;
         this.machinePlayer = machinePlayer;
         this.tableImageView = tableImageView;
         this.hasPlayerPlayed = false;
         this.deck = deck;
+        this.gameUno = gameUno;
     }
 
     public void run() {
@@ -58,8 +62,8 @@ public class ThreadPlayMachine extends Thread {
         if (!deck.isEmpty()) {
             Card newCard = deck.takeCard();
             machinePlayer.addCard(newCard);
-            System.out.println("La maquina comio una carta, Turno del jugador");
-
+            System.out.println("La maquina comio una carta, turno del jugador");
+            alertBox.showMessage("Turno", "La maquina comio una carta, turno del jugador");
         } else {
             System.out.println("No hay más cartas en el mazo.");
         }
@@ -68,6 +72,7 @@ public class ThreadPlayMachine extends Thread {
     public void unoMachine() {
         if (machinePlayer.getCardsPlayer().size() == 1) {
             System.out.println("La maquina dijo ¡UNO!");
+            alertBox.showMessage("Machina", "La maquina dijo ¡UNO!");
         }
     }
     public void setHasPlayerPlayed(boolean hasPlayerPlayed) {

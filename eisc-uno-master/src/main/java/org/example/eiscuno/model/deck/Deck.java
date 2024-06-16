@@ -1,5 +1,6 @@
 package org.example.eiscuno.model.deck;
 
+import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.unoenum.EISCUnoEnum;
 import org.example.eiscuno.model.card.Card;
 
@@ -11,12 +12,16 @@ import java.util.Stack;
  */
 public class Deck {
     private Stack<Card> deckOfCards;
+    private Stack<Card> discardPile;
+    public AlertBox alertBox = new AlertBox();
+
 
     /**
      * Constructs a new deck of Uno cards and initializes it.
      */
     public Deck() {
         deckOfCards = new Stack<>();
+        discardPile = new Stack<>();
         initializeDeck();
     }
 
@@ -52,7 +57,7 @@ public class Deck {
     private String getCardValue(String name) {
         if (name.matches(".*_[0-9]$")) {
             return name.substring(name.length() - 1);
-        } else if (name.endsWith("SKIP") || name.endsWith("RESERVE") || name.endsWith("WILD_DRAW") || name.equals("FOUR_WILD_DRAW") || name.equals("WILD")) {
+        } else if (name.startsWith("SKIP_") || name.startsWith("RESERVE_") || name.startsWith("TWO_WILD_DRAW_") || name.equals("FOUR_WILD_DRAW") || name.equals("WILD")) {
             return name;
         } else {
             return null;
@@ -60,13 +65,21 @@ public class Deck {
     }
 
     private String getCardColor(String name){
-        if(name.startsWith("GREEN")){
+        if(name.startsWith("GREEN")) {
             return "GREEN";
-        } else if(name.startsWith("YELLOW")){
+        } else if (name.startsWith("YELLOW")) {
             return "YELLOW";
-        } else if(name.startsWith("BLUE")){
+        } else if (name.startsWith("BLUE")) {
             return "BLUE";
-        } else if(name.startsWith("RED")){
+        } else if (name.startsWith("RED")) {
+            return "RED";
+        } else if (name.endsWith("GREEN")){
+            return "GREEN";
+        } else if(name.endsWith("YELLOW")){
+            return "YELLOW";
+        } else if(name.endsWith("BLUE")){
+            return "BLUE";
+        } else if(name.endsWith("RED")){
             return "RED";
         } else {
             return null;
@@ -81,6 +94,8 @@ public class Deck {
      */
     public Card takeCard() {
         if (deckOfCards.isEmpty()) {
+            refillDeckFromDiscardPile();
+            alertBox.showMessage("Mazo","El mazo fue llenado nuevamente");
             throw new IllegalStateException("No hay más cartas en el mazo.");
         }
         return deckOfCards.pop();
@@ -93,5 +108,31 @@ public class Deck {
      */
     public boolean isEmpty() {
         return deckOfCards.isEmpty();
+    }
+
+    /**
+     * Refill the deck from the discard pile and shuffle it.
+     */
+    public void refillDeckFromDiscardPile() {
+        if (discardPile.isEmpty()) {
+            return; // Cannot refill if the discard pile is empty
+        }
+        // Move all but the last card from discard pile to deck
+        Card lastDiscardedCard = discardPile.pop();
+        while (!discardPile.isEmpty()) {
+            deckOfCards.push(discardPile.pop());
+        }
+        // Put the last discarded card back to discard pile
+        discardPile.push(lastDiscardedCard);
+        Collections.shuffle(deckOfCards);
+    }
+
+    /**
+     * Adds a card to the discard pile.
+     *
+     * @param card the card to be added to the discard pile
+     */
+    public void discardCard(Card card) {
+        discardPile.push(card);
     }
 }
