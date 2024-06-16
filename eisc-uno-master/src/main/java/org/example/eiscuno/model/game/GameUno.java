@@ -1,24 +1,22 @@
 package org.example.eiscuno.model.game;
 
 import javafx.scene.control.Alert;
+import org.example.eiscuno.controller.GameUnoController;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
-import org.example.eiscuno.model.machine.TheardGameOver;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
+import org.example.eiscuno.view.GameUnoStage;
 
 /**
  * Represents a game of Uno.
  * This class manages the game logic and interactions between players, deck, and the table.
  */
 public class GameUno implements IGameUno {
-
     private Player humanPlayer;
     private Player machinePlayer;
     private Deck deck;
     private Table table;
-    TheardGameOver theardGameOver = new TheardGameOver();
-
 
     /**
      * Constructs a new GameUno instance.
@@ -41,7 +39,7 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void startGame() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             humanPlayer.addCard(this.deck.takeCard());
             machinePlayer.addCard(this.deck.takeCard());
         }
@@ -59,30 +57,32 @@ public class GameUno implements IGameUno {
             player.addCard(this.deck.takeCard());
         }
     }
-
+    /**
+     * Places a card on the table during the game.
+     *
+     * @param card The card to be placed on the table.
+     */
     @Override
     public void playCard(Card card) {
         // Determinar el tipo de jugador que está jugando la carta
-        String playerType = humanPlayer.getTypePlayer(); // Por ejemplo, asumiendo que es el jugador humano
+        String playerType = humanPlayer.getTypePlayer();
+        String playerMachime = machinePlayer.getTypePlayer();
 
         // Agregar la carta a la mesa
         this.table.addCardOnTheTable(card);
 
         // Realizar acciones posteriores al movimiento
         postMoveActions(playerType);
-
-        // Imprimir las cartas del jugador humano
-        System.out.println("Tus cartas:");
-        humanPlayer.printCardsPlayer();
+        postMoveActions(playerMachime);
 
         // Imprimir las cartas del jugador máquina
-        System.out.println("Cartas de la máquina:");
+        System.out.println(" Cartas de la máquina: ");
         machinePlayer.printCardsPlayer();
 
-        gameOver(humanPlayer);
-        gameOver(machinePlayer);
-
-        theardGameOver.run();
+        // Imprimir las cartas del jugador humano
+        System.out.println(" Tus cartas: ");
+        humanPlayer.printCardsPlayer();
+        System.out.println(" ");
     }
 
     /**
@@ -91,11 +91,15 @@ public class GameUno implements IGameUno {
      * @param playerWhoSang The player who shouted "Uno".
      */
     @Override
-    public void haveSungOne(String playerWhoSang) {
+    public void haveSingOne(String playerWhoSang) {
         if (playerWhoSang.equals("HUMAN_PLAYER")) {
             machinePlayer.addCard(this.deck.takeCard());
+            System.out.println("La maquina comio una carta");
         } else {
             humanPlayer.addCard(this.deck.takeCard());
+            System.out.println("El jugador comio una carta");
+            System.out.println(" Tus cartas: ");
+            humanPlayer.printCardsPlayer();
         }
     }
 
@@ -114,7 +118,6 @@ public class GameUno implements IGameUno {
         for (int i = 0; i < numVisibleCards; i++) {
             cards[i] = this.humanPlayer.getCard(posInitCardToShow + i);
         }
-
         return cards;
     }
 
@@ -125,12 +128,8 @@ public class GameUno implements IGameUno {
      */
     @Override
     public Boolean isGameOver() {
-
+        GameUnoStage.deleteInstance();
         return null;
-    }
-
-    public void gameOver (Player player){
-        theardGameOver.setPlayer(player);
     }
 
     /**
@@ -145,10 +144,7 @@ public class GameUno implements IGameUno {
                 card.getValue().equals(topCard.getValue()) ||
                 card.isWildCard();
     }
-    /**
-     * Verifica si la partida ha terminado, es decir, si alguno de los jugadores ha ganado.
-     * Muestra una alerta si hay un ganador.
-     */
+
     /**
      * Verifica si un jugador ha ganado después de jugar una carta.
      *
@@ -167,23 +163,18 @@ public class GameUno implements IGameUno {
     private void postMoveActions(String playerType) {
         if (playerType.equals(humanPlayer.getTypePlayer())) {
             if (humanPlayer.getCardsPlayer().isEmpty()) {
+                showAlert("GANADOR", "Ha ganado!");
                 System.out.println("¡Has ganado!");
+                isGameOver();
             }
         } else if (playerType.equals(machinePlayer.getTypePlayer())) {
             if (machinePlayer.getCardsPlayer().isEmpty()) {
+                showAlert("GAME OVER", "La maquina ha ganado!");
                 System.out.println("La máquina ha ganado!");
+                isGameOver();
             }
         }
     }
-
-    /**
-     * Places a card on the table during the game.
-     *
-     * @param player El jugador que juega la carta.
-     * @param card   The card to be placed on the table.
-     */
-
-
 
     /**
      * Muestra una alerta con el título y el mensaje especificados.
@@ -191,7 +182,7 @@ public class GameUno implements IGameUno {
      * @param title   El título de la alerta.
      * @param message El mensaje de la alerta.
      */
-    private void showAlert(String title, String message) {
+    public void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);

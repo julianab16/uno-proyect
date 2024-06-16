@@ -57,7 +57,6 @@ public class Deck {
         } else {
             return null;
         }
-
     }
 
     private String getCardColor(String name){
