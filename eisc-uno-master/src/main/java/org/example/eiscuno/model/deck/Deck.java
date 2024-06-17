@@ -55,7 +55,7 @@ public class Deck {
     private String getCardValue(String name) {
         if (name.matches(".*_[0-9]$")) {
             return name.substring(name.length() - 1);
-        } else if(name.startsWith("SKIP_")){
+        } else if(name.startsWith("SKIP")){
                 return "SKIP";
         } else if (name.startsWith("RESERVE")) {
                 return "RESERVE";

@@ -67,8 +67,13 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
         t.start();
 
-        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView, this.deck);
+        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView, this.deck, this.gameUno);
         threadPlayMachine.start();
+        System.out.println(" Tus cartas: ");
+        humanPlayer.printCardsPlayer();
+        System.out.println(" ");
+        System.out.println(" Cartas de la máquina: ");
+        machinePlayer.printCardsPlayer();
     }
 
     /**
@@ -103,26 +108,23 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                     printCardsHumanPlayer();
                     primeraCartaPuesta = true;
 
-                    System.out.println(" Tus cartas: ");
+                    System.out.println("\n Tus cartas: ");
                     humanPlayer.printCardsPlayer();
 
                 } else if (gameUno.canPlayCard(card)) {
                     tableImageView.setImage(card.getImage());
                     humanPlayer.removeCard(findPosCardsHumanPlayer(card));
-                    threadPlayMachine.setHasPlayerPlayed(true);
+                    gameUno.isWildCards(card,threadPlayMachine, machinePlayer);
                     gameUno.playCard(card);
                     printCardsHumanPlayer();
-
-                    System.out.println(" Tus cartas: ");
+                    System.out.println("\n Tus cartas: ");
                     humanPlayer.printCardsPlayer();
-
                     deck.discardCard(card);
                     Card currentCard = card;
                 } else {
                     alertBox.showMessageError("Error", "Carta invalida. Intenta otra vez. \uD83C\uDCCF");
                 }
             });
-
             this.gridPaneCardsPlayer.add(cardImageView, i, 0);
         }
     }
@@ -206,6 +208,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         if (!deck.isEmpty()) {
             Card newCard = deck.takeCard();
             humanPlayer.addCard(newCard);
+            deck.discardCard(newCard);
             printCardsHumanPlayer();
             System.out.println("\n Tus cartas: ");
             humanPlayer.printCardsPlayer();
@@ -223,14 +226,14 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         buttonDeckCards.getTransforms().add(scale);
         Glow glow = new Glow(0.8);
         buttonDeckCards.setEffect(glow);
-
     }
+
     @FXML
     void onHandleMouseExitedDeckCards(MouseEvent event) {
         buttonDeckCards.getTransforms().clear();
         buttonDeckCards.setEffect(null);
-
     }
+
     /**
      * Handles the action of saying "Uno".
      *
@@ -239,7 +242,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     @FXML
     void onHandleUno(ActionEvent event) {
         if (humanPlayer.getCardsPlayer().size() == 1) {
-            System.out.println("El jugador dijo ¡UNO!");
+            System.out.println("\nEl jugador dijo ¡UNO!\n");
             playerTime = System.currentTimeMillis();
             playerSaidUno = true;
             checkUno();
@@ -253,20 +256,21 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             humanPlayer.printCardsPlayer();
         }
     }
+
     @FXML
     void onHandleMouseEnteredUno(MouseEvent event) {
         Scale scale = new Scale(1.1,1.1);
         buttonUno.getTransforms().add(scale);
         Glow glow = new Glow(0.8);
         buttonUno.setEffect(glow);
-
     }
+
     @FXML
     void onHandleMouseExitedUno(MouseEvent event) {
         buttonUno.getTransforms().clear();
         buttonUno.setEffect(null);
-
     }
+
     @Override
     public void onMachineSaysUno()  {
         machineTime = System.currentTimeMillis();
@@ -278,6 +282,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     void OnHnableExitButton(ActionEvent event) {
         GameUnoStage.deleteInstance();
     }
+
     @FXML
     void onHandleMouseEnteredOut(MouseEvent event) {
         Scale scale = new Scale(1.1,1.1);
@@ -286,27 +291,26 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         dropShadow.setColor(Color.WHITE);
         dropShadow.setRadius(20);
         buttonOut.setEffect(dropShadow);
-
     }
+
     @FXML
     void onHandleMouseExitedOut(MouseEvent event) {
         buttonOut.getTransforms().clear();
         buttonOut.setEffect(null);
-
     }
 
     private void checkUno() {
-        System.out.println("Maquina lo dijo en "+machineTime);
-        System.out.println("jugador lo dijo en "+playerTime);
+        System.out.println("\nMaquina lo dijo en "+machineTime);
+        System.out.println("\njugador lo dijo en "+playerTime);
         if (machineSaidUno && playerSaidUno) {
-            if (machineTime < playerTime) {
+            if (machineTime < playerTime || playerTime == 0) {
                 alertBox.showMessage("UNO","¡Máquina dijo UNO más rápido! Toma una carta. \uD83C\uDCCF");
-                System.out.println("¡Máquina dijo UNO más rápido! Jugador debe comer una carta.\n");
+                System.out.println("\n¡Máquina dijo UNO más rápido! Jugador debe comer una carta.\n");
                 String playerMachime = machinePlayer.getTypePlayer();
                 gameUno.haveSingOne(playerMachime);
                 printCardsHumanPlayer();
             } else {
-                System.out.println("¡Jugador dijo UNO más rápido!\n");
+                System.out.println("\n¡Jugador dijo UNO más rápido!\n");
                 alertBox.showMessage("UNO","¡Has dicho UNO más rápido! \uD83D\uDE04");
             }
             machineTime = 0;

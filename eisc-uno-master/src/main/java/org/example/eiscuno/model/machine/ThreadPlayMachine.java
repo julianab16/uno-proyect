@@ -4,6 +4,7 @@ import javafx.scene.image.ImageView;
 import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
+import org.example.eiscuno.model.game.GameUno;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 
@@ -12,14 +13,18 @@ public class ThreadPlayMachine extends Thread {
     private Player machinePlayer;
     private ImageView tableImageView;
     private volatile boolean hasPlayerPlayed;
+    private GameUno gameUno;
+    private Player humanPlayer;
+    private  ThreadPlayMachine threadPlayMachine;
     private Deck deck;
     public AlertBox alertBox = new AlertBox();
-    public ThreadPlayMachine(Table table, Player machinePlayer, ImageView tableImageView, Deck deck) {
+    public ThreadPlayMachine(Table table, Player machinePlayer, ImageView tableImageView, Deck deck, GameUno gameUno) {
         this.table = table;
         this.machinePlayer = machinePlayer;
         this.tableImageView = tableImageView;
         this.hasPlayerPlayed = false;
         this.deck = deck;
+        this.gameUno = gameUno;
     }
 
     public void run() {
@@ -45,11 +50,11 @@ public class ThreadPlayMachine extends Thread {
         Card playableCard = machinePlayer.findPlayableCard(currentColor, currentValue);
 
         if (playableCard != null) {
+            //gameUno.isWildCards(playableCard,threadPlayMachine,humanPlayer);
             table.addCardOnTheTable(playableCard);
             tableImageView.setImage(playableCard.getImage());
             machinePlayer.getCardsPlayer().remove(playableCard);
         } else {
-            // Lógica para sacar una nueva carta no incluida aquí
             eatCardMachine();
         }
         unoMachine();
@@ -61,9 +66,11 @@ public class ThreadPlayMachine extends Thread {
         if (!deck.isEmpty()) {
             Card newCard = deck.takeCard();
             machinePlayer.addCard(newCard);
+            deck.discardCard(newCard);
             alertBox.showMessage("Turno", "La maquina comio una carta, turno del jugador \uD83C\uDFC3");
         } else {
-            System.out.println("No hay más cartas en el mazo.");
+            deck.refillDeckFromDiscardPile();
+            System.out.println("\nNo hay más cartas en el mazo.");
         }
     }
 

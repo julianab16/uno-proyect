@@ -19,7 +19,6 @@ public class GameUno implements IGameUno {
     private Table table;
     public AlertBox alertBox = new AlertBox();
 
-
     /**
      * Constructs a new GameUno instance.
      *
@@ -44,9 +43,10 @@ public class GameUno implements IGameUno {
         for (int i = 0; i < 5; i++) {
             humanPlayer.addCard(this.deck.takeCard());
             machinePlayer.addCard(this.deck.takeCard());
+            Card currentCard = deck.takeCard();
+            deck.discardCard(currentCard);
         }
-        Card currentCard = deck.takeCard();
-        deck.discardCard(currentCard);
+
     }
     /**
      * Allows a player to draw a specified number of cards from the deck.
@@ -56,7 +56,7 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void eatCard(Player player, int numberOfCards) {
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < numberOfCards; i++) {
             player.addCard(this.deck.takeCard());
         }
     }
@@ -70,22 +70,11 @@ public class GameUno implements IGameUno {
         // Determinar el tipo de jugador que está jugando la carta
         String playerType = humanPlayer.getTypePlayer();
         String playerMachime = machinePlayer.getTypePlayer();
-
         // Agregar la carta a la mesa
         this.table.addCardOnTheTable(card);
-
         // Realizar acciones posteriores al movimiento
         postMoveActions(playerType);
         postMoveActions(playerMachime);
-
-        // Imprimir las cartas del jugador máquina
-        System.out.println(" Cartas de la máquina: ");
-        machinePlayer.printCardsPlayer();
-        System.out.println(" ");
-        // Imprimir las cartas del jugador humano
-        System.out.println(" Tus cartas: ");
-        humanPlayer.printCardsPlayer();
-        System.out.println(" ");
     }
     /**
      * Handles the scenario when a player shouts "Uno", forcing the other player to draw a card.
@@ -96,10 +85,10 @@ public class GameUno implements IGameUno {
     public void haveSingOne(String playerWhoSang) {
         if (playerWhoSang.equals("HUMAN_PLAYER")) {
             machinePlayer.addCard(this.deck.takeCard());
-            System.out.println("La maquina comio una carta");
+            System.out.println("La maquina comio una carta \n");
         } else {
             humanPlayer.addCard(this.deck.takeCard());
-            System.out.println("El jugador comio una carta");
+            System.out.println("El jugador comio una carta \n");
             System.out.println(" Tus cartas: ");
             humanPlayer.printCardsPlayer();
         }
@@ -130,7 +119,7 @@ public class GameUno implements IGameUno {
     public Boolean isGameOver() {
         GameUnoStage.deleteInstance();
         ThreadPlayMachine.currentThread().interrupt();
-        return null;
+        return true;
     }
     /**
      * Verifica si una carta puede ser jugada según las reglas del juego.
@@ -144,14 +133,25 @@ public class GameUno implements IGameUno {
                 card.getValue().equals(topCard.getValue()) ||
                 card.isWildCard();
     }
-    /**
-     * Verifica si un jugador ha ganado después de jugar una carta.
-     *
-     * @param player El jugador cuya mano se verificará.
-     * @return true si el jugador ha ganado, false de lo contrario.
-     */
-    private boolean checkWin(Player player) {
-        return player.getCardsPlayer().isEmpty();
+
+    public void isWildCards(Card card, ThreadPlayMachine threadPlayMachine, Player player){
+        if (card.getValue() == "SKIP"){
+            threadPlayMachine.setHasPlayerPlayed(false);
+            System.out.println("\nUtilizaste una carta de Skip.\n");
+        } else if (card.getValue() =="RESERVE") {
+            threadPlayMachine.setHasPlayerPlayed(false);
+            System.out.println("\nUtilizaste una carta de Reverse.\n");
+        } else if (card.getValue() =="TWO_WILD_DRAW") {
+            eatCard(player, 2);
+            System.out.println("\nUtilizasta un TWO_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas");
+            threadPlayMachine.setHasPlayerPlayed(true);
+        } else if (card.getValue() =="WILD") {
+
+        }else if (card.getValue() == "FOUR_WILD_DRAW" || card.getValue() =="WILD") {
+        }
+        else {
+            threadPlayMachine.setHasPlayerPlayed(true);
+        }
     }
 
     /**
@@ -163,13 +163,13 @@ public class GameUno implements IGameUno {
         if (playerType.equals(humanPlayer.getTypePlayer())) {
             if (humanPlayer.getCardsPlayer().isEmpty()) {
                 alertBox.showMessage("GANADOR", "Has ganado! \uD83C\uDFC6");
-                System.out.println("¡Has ganado!");
+                System.out.println("\nFin de la partida!\n");
                 isGameOver();
             }
         } else if (playerType.equals(machinePlayer.getTypePlayer())) {
             if (machinePlayer.getCardsPlayer().isEmpty()) {
                 alertBox.showMessage("GAME OVER", "La maquina ha ganado! \uD83E\uDD16 ");
-                System.out.println("La máquina ha ganado!");
+                System.out.println("\nFin de la partida!\n");
                 isGameOver();
             }
         }
