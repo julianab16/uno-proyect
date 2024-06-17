@@ -1,5 +1,6 @@
 package org.example.eiscuno.model.table;
 
+import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
  */
 public class Table {
     private ArrayList<Card> cardsTable;
+    public AlertBox alertBox = new AlertBox();
 
     /**
      * Constructs a new Table object with no cards on it.
@@ -34,6 +36,7 @@ public class Table {
      */
     public Card getCurrentCardOnTheTable() throws IndexOutOfBoundsException {
         if (cardsTable.isEmpty()) {
+            alertBox.showMessageError("Error", "No has puesto una carta para empezar el juego");
             throw new IndexOutOfBoundsException("There are no cards on the table.");
         }
         return this.cardsTable.get(this.cardsTable.size()-1);

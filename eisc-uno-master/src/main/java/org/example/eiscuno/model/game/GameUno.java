@@ -3,6 +3,7 @@ package org.example.eiscuno.model.game;
 import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
+import org.example.eiscuno.model.machine.ThreadPlayMachine;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.view.GameUnoStage;
@@ -132,6 +133,7 @@ public class GameUno implements IGameUno {
     @Override
     public Boolean isGameOver() {
         GameUnoStage.deleteInstance();
+        ThreadPlayMachine.currentThread().interrupt();
         return null;
     }
 
@@ -166,13 +168,13 @@ public class GameUno implements IGameUno {
     private void postMoveActions(String playerType) {
         if (playerType.equals(humanPlayer.getTypePlayer())) {
             if (humanPlayer.getCardsPlayer().isEmpty()) {
-                alertBox.showMessage("GANADOR", "Ha ganado!");
+                alertBox.showMessage("GANADOR", "Has ganado! \uD83C\uDFC6");
                 System.out.println("¡Has ganado!");
                 isGameOver();
             }
         } else if (playerType.equals(machinePlayer.getTypePlayer())) {
             if (machinePlayer.getCardsPlayer().isEmpty()) {
-                alertBox.showMessage("GAME OVER", "La maquina ha ganado!");
+                alertBox.showMessage("GAME OVER", "La maquina ha ganado! \uD83E\uDD16 ");
                 System.out.println("La máquina ha ganado!");
                 isGameOver();
             }

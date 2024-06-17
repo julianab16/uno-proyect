@@ -79,6 +79,8 @@ public class Deck {
             return "BLUE";
         } else if(name.endsWith("RED")){
             return "RED";
+        } else if (name.equals("FOUR_WILD_DRAW") || name.equals("WILD")) {
+            return "NONE"; // O `null` si prefieres
         } else {
             return null;
         }

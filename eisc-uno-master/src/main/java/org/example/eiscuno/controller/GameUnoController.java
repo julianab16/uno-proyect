@@ -53,7 +53,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
         t.start();
 
-        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView, this.deck, this.gameUno);
+        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView, this.deck);
         threadPlayMachine.start();
     }
 
@@ -168,11 +168,11 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             System.out.println(" Tus cartas: ");
             humanPlayer.printCardsPlayer();
             threadPlayMachine.setHasPlayerPlayed(true);
-            System.out.println("Turno de la maquina");
+            System.out.println("\nTurno de la maquina\n");
         } else {
             deck.refillDeckFromDiscardPile();
-            alertBox.showMessage("Mazo","El mazo se acabo!\nPero fue llenado nuevamente.");
-            System.out.println("No hay más cartas en el mazo.");
+            alertBox.showMessage("Mazo","El mazo se acabo!\nPero fue llenado nuevamente. \uD83C\uDCCF");
+            System.out.println("\nNo hay más cartas en el mazo.\n");
         }
     }
 
@@ -190,7 +190,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             checkUno();
             // Aquí puedes añadir lógica adicional si hay reglas específicas para cuando se dice "UNO"
         } else {
-            alertBox.showMessageError("Error", "No puedes decir 'UNO' porque no tienes exactamente una carta. Toma una carta como penitencia. :(");
+            alertBox.showMessageError("Error", "No puedes decir 'UNO' porque no tienes exactamente una carta. Toma una carta como penitencia. \uD83D\uDE14");
             // Penalización: por ejemplo, el jugador debe tomar 2 cartas
             gameUno.eatCard(humanPlayer, 1);
             printCardsHumanPlayer();
@@ -215,12 +215,14 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         System.out.println("jugador lo dijo en "+playerTime);
         if (machineSaidUno && playerSaidUno) {
             if (machineTime < playerTime) {
-                System.out.println("¡Máquina dijo UNO más rápido! Jugador debe comer una carta.");
+                alertBox.showMessage("UNO","¡Máquina dijo UNO más rápido! Toma una carta. \uD83C\uDCCF");
+                System.out.println("¡Máquina dijo UNO más rápido! Jugador debe comer una carta.\n");
                 String playerMachime = machinePlayer.getTypePlayer();
                 gameUno.haveSingOne(playerMachime);
                 printCardsHumanPlayer();
             } else {
-                System.out.println("¡Jugador dijo UNO más rápido!");
+                System.out.println("¡Jugador dijo UNO más rápido!\n");
+                alertBox.showMessage("UNO","¡Has dicho UNO más rápido! \uD83D\uDE04");
             }
             machineTime = 0;
             playerTime = 0;
