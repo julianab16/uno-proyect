@@ -1,11 +1,19 @@
 package org.example.eiscuno.controller;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.transform.Scale;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.game.GameUno;
@@ -24,6 +32,16 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     private GridPane gridPaneCardsPlayer;
     @FXML
     private ImageView tableImageView;
+    @FXML
+    private Button buttonBack;
+    @FXML
+    private Button buttonNext;
+    @FXML
+    private Button buttonDeckCards;
+    @FXML
+    private Button buttonOut;
+    @FXML
+    private Button buttonUno;
     private Player humanPlayer;
     private Player machinePlayer;
     private Deck deck;
@@ -137,6 +155,22 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             printCardsHumanPlayer();
         }
     }
+    @FXML
+    void onHandleMouseEnteredBack(MouseEvent event) {
+        Scale scale = new Scale(1.1,1.1);
+        buttonBack.getTransforms().add(scale);
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setColor(Color.DARKRED);
+        dropShadow.setRadius(20);
+        buttonBack.setEffect(dropShadow);
+    }
+
+    @FXML
+    void onHandleMouseExitedBack(MouseEvent event) {
+        buttonBack.getTransforms().clear();
+        buttonBack.setEffect(null);
+    }
+
 
     /**
      * Handles the "Next" button action to show the next set of cards.
@@ -145,11 +179,27 @@ public class GameUnoController implements ThreadSingUNOMachineI {
      */
     @FXML
     void onHandleNext(ActionEvent event) {
+
         if (this.posInitCardToShow < this.humanPlayer.getCardsPlayer().size() - 4) {
             this.posInitCardToShow++;
             printCardsHumanPlayer();
         }
     }
+    @FXML
+    void onHandleMouseEnteredNext(MouseEvent event) {
+        Scale scale = new Scale(1.1,1.1);
+        buttonNext.getTransforms().add(scale);
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setColor(Color.DARKRED);
+        dropShadow.setRadius(20);
+        buttonNext.setEffect(dropShadow);
+    }
+    @FXML
+    void onHandleMouseExitedNext(MouseEvent event) {
+        buttonNext.getTransforms().clear();
+        buttonNext.setEffect(null);
+    }
+
 
     /**
      * Handles the action of taking a card.
@@ -167,6 +217,20 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         } else {
             System.out.println("No hay más cartas en el mazo.");
         }
+    }
+    @FXML
+    void onHandleMouseEnteredDeckCards(MouseEvent event) {
+        Scale scale = new Scale(1.1,1.1);
+        buttonDeckCards.getTransforms().add(scale);
+        Glow glow = new Glow(0.8);
+        buttonDeckCards.setEffect(glow);
+
+    }
+    @FXML
+    void onHandleMouseExitedDeckCards(MouseEvent event) {
+        buttonDeckCards.getTransforms().clear();
+        buttonDeckCards.setEffect(null);
+
     }
 
     /**
@@ -191,6 +255,20 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             humanPlayer.printCardsPlayer();
         }
     }
+    @FXML
+    void onHandleMouseEnteredUno(MouseEvent event) {
+        Scale scale = new Scale(1.1,1.1);
+        buttonUno.getTransforms().add(scale);
+        Glow glow = new Glow(0.8);
+        buttonUno.setEffect(glow);
+
+    }
+    @FXML
+    void onHandleMouseExitedUno(MouseEvent event) {
+        buttonUno.getTransforms().clear();
+        buttonUno.setEffect(null);
+
+    }
     @Override
     public void onMachineSaysUno()  {
         machineTime = System.currentTimeMillis();
@@ -201,6 +279,22 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     @FXML
     void OnHnableExitButton(ActionEvent event) {
         GameUnoStage.deleteInstance();
+    }
+    @FXML
+    void onHandleMouseEnteredOut(MouseEvent event) {
+        Scale scale = new Scale(1.1,1.1);
+        buttonOut.getTransforms().add(scale);
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setColor(Color.WHITE);
+        dropShadow.setRadius(20);
+        buttonOut.setEffect(dropShadow);
+
+    }
+    @FXML
+    void onHandleMouseExitedOut(MouseEvent event) {
+        buttonOut.getTransforms().clear();
+        buttonOut.setEffect(null);
+
     }
 
     private void checkUno() {
