@@ -48,7 +48,6 @@ public class GameUno implements IGameUno {
         Card currentCard = deck.takeCard();
         deck.discardCard(currentCard);
     }
-
     /**
      * Allows a player to draw a specified number of cards from the deck.
      *
@@ -82,13 +81,12 @@ public class GameUno implements IGameUno {
         // Imprimir las cartas del jugador máquina
         System.out.println(" Cartas de la máquina: ");
         machinePlayer.printCardsPlayer();
-
+        System.out.println(" ");
         // Imprimir las cartas del jugador humano
         System.out.println(" Tus cartas: ");
         humanPlayer.printCardsPlayer();
         System.out.println(" ");
     }
-
     /**
      * Handles the scenario when a player shouts "Uno", forcing the other player to draw a card.
      *
@@ -106,7 +104,6 @@ public class GameUno implements IGameUno {
             humanPlayer.printCardsPlayer();
         }
     }
-
     /**
      * Retrieves the current visible cards of the human player starting from a specific position.
      *
@@ -124,7 +121,6 @@ public class GameUno implements IGameUno {
         }
         return cards;
     }
-
     /**
      * Checks if the game is over.
      *
@@ -136,7 +132,6 @@ public class GameUno implements IGameUno {
         ThreadPlayMachine.currentThread().interrupt();
         return null;
     }
-
     /**
      * Verifica si una carta puede ser jugada según las reglas del juego.
      *
@@ -149,7 +144,6 @@ public class GameUno implements IGameUno {
                 card.getValue().equals(topCard.getValue()) ||
                 card.isWildCard();
     }
-
     /**
      * Verifica si un jugador ha ganado después de jugar una carta.
      *

@@ -25,7 +25,7 @@
             <left>
                 <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <children>
-                        <Button contentDisplay="GRAPHIC_ONLY" layoutX="51.0" layoutY="38.0" mnemonicParsing="false" onAction="#onHandleTakeCard" prefHeight="149.0" prefWidth="100.0" style="-fx-background-color: transparent;" text="Baraja">
+                        <Button fx:id="buttonDeckCards" contentDisplay="GRAPHIC_ONLY" layoutX="50.0" layoutY="30.0" mnemonicParsing="false" onAction="#onHandleTakeCard" onMouseEntered="#onHandleMouseEnteredDeckCards" onMouseExited="#onHandleMouseExitedDeckCards" prefHeight="149.0" prefWidth="100.0" style="-fx-background-color: transparent;" text="Baraja">
                             <graphic>
                                 <ImageView fitHeight="174.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -35,16 +35,19 @@
                                         <Cursor fx:constant="CLOSED_HAND" />
                                     </cursor>
                                 </ImageView>
-                            </graphic></Button>
+                            </graphic>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor></Button>
                     </children>
                 </Pane>
             </left>
             <right>
-                <Pane prefHeight="237.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <children>
-                        <Button contentDisplay="GRAPHIC_ONLY" layoutY="78.0" mnemonicParsing="false" onAction="#onHandleUno" prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: transparent;" text="UNO">
+                        <Button fx:id="buttonUno" contentDisplay="GRAPHIC_ONLY" layoutX="50.0" layoutY="75.0" mnemonicParsing="false" onAction="#onHandleUno" onMouseEntered="#onHandleMouseEnteredUno" onMouseExited="#onHandleMouseExitedUno" prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: transparent;" text="UNO" translateX="-20.0">
                             <graphic>
-                                <ImageView fitHeight="104.0" fitWidth="132.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fitHeight="96.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true">
                                     <cursor>
                                         <Cursor fx:constant="CLOSED_HAND" />
                                     </cursor>
@@ -52,12 +55,15 @@
                                         <Image url="@images/button_uno.png" />
                                     </image>
                                 </ImageView>
-                            </graphic></Button>
+                            </graphic>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor></Button>
                     </children>
                 </Pane>
             </right>
             <center>
-                <Pane prefHeight="237.0" prefWidth="462.0" BorderPane.alignment="CENTER">
+                <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <children>
                         <ImageView fx:id="tableImageView" fitHeight="171.0" fitWidth="147.0" layoutX="158.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true" />
                     </children>
@@ -115,14 +121,17 @@
                                 <Insets left="10.0" right="10.0" />
                             </padding>
                         </GridPane>
-                        <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#OnHnableExitButton" prefHeight="57.0" prefWidth="115.0" style="-fx-background-color: transparent;" text="Salir" translateX="70.0">
+                        <Button fx:id="buttonOut" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#OnHnableExitButton" onMouseEntered="#onHandleMouseEnteredOut" onMouseExited="#onHandleMouseExitedOut" prefHeight="57.0" prefWidth="115.0" style="-fx-background-color: transparent;" text="Salir" translateX="70.0">
                             <graphic>
-                                <ImageView fitHeight="66.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fitHeight="57.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@images/cerrar-sesion.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
                         </Button>
                     </children>
                     <opaqueInsets>
@@ -139,7 +148,7 @@
             <bottom>
                 <HBox alignment="CENTER" prefHeight="115.0" prefWidth="639.0" BorderPane.alignment="CENTER">
                     <children>
-                        <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onHandleBack" prefWidth="74.0" style="-fx-background-color: transparent;" text="Anterior" textFill="WHITE">
+                        <Button fx:id="buttonBack" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onHandleBack" onMouseEntered="#onHandleMouseEnteredBack" onMouseExited="#onHandleMouseExitedBack" prefWidth="74.0" style="-fx-background-color: transparent;" text="Anterior" textFill="WHITE">
                             <font>
                                 <Font name="Berlin Sans FB" size="12.0" />
                             </font>
@@ -153,19 +162,25 @@
                                     </cursor>
                                 </ImageView>
                             </graphic>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
                         </Button>
-                        <GridPane fx:id="gridPaneCardsPlayer" prefHeight="108.0" prefWidth="400.0">
+                        <GridPane fx:id="gridPaneCardsPlayer" prefHeight="74.0" prefWidth="400.0">
                             <columnConstraints>
                                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="99.0" />
-                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="103.0" minWidth="10.0" prefWidth="101.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
                             <rowConstraints>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
                         </GridPane>
-                        <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onHandleNext" prefWidth="74.0" style="-fx-background-color: transparent;" text="Siguiente" textFill="WHITE">
+                        <Button fx:id="buttonNext" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onHandleNext" onMouseEntered="#onHandleMouseEnteredNext" onMouseExited="#onHandleMouseExitedNext" prefWidth="74.0" style="-fx-background-color: transparent;" text="Siguiente" textFill="WHITE">
                             <graphic>
                                 <ImageView fitHeight="68.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -176,6 +191,9 @@
                                     </cursor>
                                 </ImageView>
                             </graphic>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
                         </Button>
                     </children>
                 </HBox>

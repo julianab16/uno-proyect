@@ -3,10 +3,15 @@ package org.example.eiscuno.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import org.example.eiscuno.model.alertbox.AlertBox;
+import javafx.scene.paint.Color;
+import javafx.scene.transform.Scale;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.game.GameUno;
@@ -25,6 +30,16 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     private GridPane gridPaneCardsPlayer;
     @FXML
     private ImageView tableImageView;
+    @FXML
+    private Button buttonBack;
+    @FXML
+    private Button buttonNext;
+    @FXML
+    private Button buttonDeckCards;
+    @FXML
+    private Button buttonOut;
+    @FXML
+    private Button buttonUno;
     private Player humanPlayer;
     private Player machinePlayer;
     private Deck deck;
@@ -39,7 +54,6 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     private boolean machineSaidUno;
     private boolean playerSaidUno;
     public AlertBox alertBox = new AlertBox();
-
     /**
      * Initializes the controller.
      */
@@ -105,7 +119,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                     deck.discardCard(card);
                     Card currentCard = card;
                 } else {
-                    alertBox.showMessageError("Error", "Carta invalida. Intenta otra vez.");
+                    alertBox.showMessageError("Error", "Carta invalida. Intenta otra vez. \uD83C\uDCCF");
                 }
             });
 
@@ -140,7 +154,21 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             printCardsHumanPlayer();
         }
     }
+    @FXML
+    void onHandleMouseEnteredBack(MouseEvent event) {
+        Scale scale = new Scale(1.1,1.1);
+        buttonBack.getTransforms().add(scale);
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setColor(Color.DARKRED);
+        dropShadow.setRadius(20);
+        buttonBack.setEffect(dropShadow);
+    }
 
+    @FXML
+    void onHandleMouseExitedBack(MouseEvent event) {
+        buttonBack.getTransforms().clear();
+        buttonBack.setEffect(null);
+    }
     /**
      * Handles the "Next" button action to show the next set of cards.
      *
@@ -148,12 +176,26 @@ public class GameUnoController implements ThreadSingUNOMachineI {
      */
     @FXML
     void onHandleNext(ActionEvent event) {
+
         if (this.posInitCardToShow < this.humanPlayer.getCardsPlayer().size() - 4) {
             this.posInitCardToShow++;
             printCardsHumanPlayer();
         }
     }
-
+    @FXML
+    void onHandleMouseEnteredNext(MouseEvent event) {
+        Scale scale = new Scale(1.1,1.1);
+        buttonNext.getTransforms().add(scale);
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setColor(Color.DARKRED);
+        dropShadow.setRadius(20);
+        buttonNext.setEffect(dropShadow);
+    }
+    @FXML
+    void onHandleMouseExitedNext(MouseEvent event) {
+        buttonNext.getTransforms().clear();
+        buttonNext.setEffect(null);
+    }
     /**
      * Handles the action of taking a card.
      *
@@ -165,17 +207,30 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             Card newCard = deck.takeCard();
             humanPlayer.addCard(newCard);
             printCardsHumanPlayer();
-            System.out.println(" Tus cartas: ");
+            System.out.println("\n Tus cartas: ");
             humanPlayer.printCardsPlayer();
             threadPlayMachine.setHasPlayerPlayed(true);
-            System.out.println("\nTurno de la maquina\n");
+            System.out.println("\nTurno de la maquina");
         } else {
             deck.refillDeckFromDiscardPile();
             alertBox.showMessage("Mazo","El mazo se acabo!\nPero fue llenado nuevamente. \uD83C\uDCCF");
             System.out.println("\nNo hay más cartas en el mazo.\n");
         }
     }
+    @FXML
+    void onHandleMouseEnteredDeckCards(MouseEvent event) {
+        Scale scale = new Scale(1.1,1.1);
+        buttonDeckCards.getTransforms().add(scale);
+        Glow glow = new Glow(0.8);
+        buttonDeckCards.setEffect(glow);
 
+    }
+    @FXML
+    void onHandleMouseExitedDeckCards(MouseEvent event) {
+        buttonDeckCards.getTransforms().clear();
+        buttonDeckCards.setEffect(null);
+
+    }
     /**
      * Handles the action of saying "Uno".
      *
@@ -198,6 +253,20 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             humanPlayer.printCardsPlayer();
         }
     }
+    @FXML
+    void onHandleMouseEnteredUno(MouseEvent event) {
+        Scale scale = new Scale(1.1,1.1);
+        buttonUno.getTransforms().add(scale);
+        Glow glow = new Glow(0.8);
+        buttonUno.setEffect(glow);
+
+    }
+    @FXML
+    void onHandleMouseExitedUno(MouseEvent event) {
+        buttonUno.getTransforms().clear();
+        buttonUno.setEffect(null);
+
+    }
     @Override
     public void onMachineSaysUno()  {
         machineTime = System.currentTimeMillis();
@@ -208,6 +277,22 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     @FXML
     void OnHnableExitButton(ActionEvent event) {
         GameUnoStage.deleteInstance();
+    }
+    @FXML
+    void onHandleMouseEnteredOut(MouseEvent event) {
+        Scale scale = new Scale(1.1,1.1);
+        buttonOut.getTransforms().add(scale);
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setColor(Color.WHITE);
+        dropShadow.setRadius(20);
+        buttonOut.setEffect(dropShadow);
+
+    }
+    @FXML
+    void onHandleMouseExitedOut(MouseEvent event) {
+        buttonOut.getTransforms().clear();
+        buttonOut.setEffect(null);
+
     }
 
     private void checkUno() {

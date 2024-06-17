@@ -53,6 +53,8 @@ public class ThreadPlayMachine extends Thread {
             eatCardMachine();
         }
         unoMachine();
+        System.out.println("\n Cartas de la máquina: ");
+        machinePlayer.printCardsPlayer();
     }
 
     void eatCardMachine() {

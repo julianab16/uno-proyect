@@ -55,8 +55,16 @@ public class Deck {
     private String getCardValue(String name) {
         if (name.matches(".*_[0-9]$")) {
             return name.substring(name.length() - 1);
-        } else if (name.startsWith("SKIP_") || name.startsWith("RESERVE_") || name.startsWith("TWO_WILD_DRAW_") || name.equals("FOUR_WILD_DRAW") || name.equals("WILD")) {
-            return name;
+        } else if(name.startsWith("SKIP_")){
+                return "SKIP";
+        } else if (name.startsWith("RESERVE")) {
+                return "RESERVE";
+        } else if (name.startsWith("TWO_WILD_DRAW")) {
+                return "TWO_WILD_DRAW";
+        } else if (name.equals("FOUR_WILD_DRAW")) {
+                return "FOUR_WILD_DRAW";
+        } else if (name.equals("WILD")) {
+                return "WILD";
         } else {
             return null;
         }
@@ -80,7 +88,7 @@ public class Deck {
         } else if(name.endsWith("RED")){
             return "RED";
         } else if (name.equals("FOUR_WILD_DRAW") || name.equals("WILD")) {
-            return "NONE"; // O `null` si prefieres
+            return "NONE";
         } else {
             return null;
         }
@@ -115,14 +123,12 @@ public class Deck {
      */
     public void refillDeckFromDiscardPile() {
         if (discardPile.isEmpty()) {
-            return; // Cannot refill if the discard pile is empty
+            return;
         }
-        // Move all but the last card from discard pile to deck
         Card lastDiscardedCard = discardPile.pop();
         while (!discardPile.isEmpty()) {
             deckOfCards.push(discardPile.pop());
         }
-        // Put the last discarded card back to discard pile
         discardPile.push(lastDiscardedCard);
         Collections.shuffle(deckOfCards);
     }

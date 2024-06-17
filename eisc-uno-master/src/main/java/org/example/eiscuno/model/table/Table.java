@@ -36,7 +36,7 @@ public class Table {
      */
     public Card getCurrentCardOnTheTable() throws IndexOutOfBoundsException {
         if (cardsTable.isEmpty()) {
-            alertBox.showMessageError("Error", "No has puesto una carta para empezar el juego");
+            alertBox.showMessageError("Error", "No puedes tomar una carta si no has empezado el juego ❌");
             throw new IndexOutOfBoundsException("There are no cards on the table.");
         }
         return this.cardsTable.get(this.cardsTable.size()-1);
