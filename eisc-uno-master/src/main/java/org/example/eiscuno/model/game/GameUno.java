@@ -8,6 +8,8 @@ import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.view.GameUnoStage;
 
+import java.util.Scanner;
+
 /**
  * Represents a game of Uno.
  * This class manages the game logic and interactions between players, deck, and the table.
@@ -134,23 +136,50 @@ public class GameUno implements IGameUno {
                 card.isWildCard();
     }
 
-    public void isWildCards(Card card, ThreadPlayMachine threadPlayMachine, Player player){
-        if (card.getValue() == "SKIP"){
-            threadPlayMachine.setHasPlayerPlayed(false);
-            System.out.println("\nUtilizaste una carta de Skip.\n");
-        } else if (card.getValue() =="RESERVE") {
-            threadPlayMachine.setHasPlayerPlayed(false);
-            System.out.println("\nUtilizaste una carta de Reverse.\n");
-        } else if (card.getValue() =="TWO_WILD_DRAW") {
-            eatCard(player, 2);
-            System.out.println("\nUtilizasta un TWO_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas");
-            threadPlayMachine.setHasPlayerPlayed(true);
-        } else if (card.getValue() =="WILD") {
+    private void changeColor(){//gente se supone que aca usa una funcion que permite escribir po rmedio del teclado el color que a que lo quiere cambiar
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Elige un nuevo color (RED, BLUE, GREEN, YELLOW): ");
+        String newColor = scanner.nextLine().toUpperCase();
 
-        }else if (card.getValue() == "FOUR_WILD_DRAW" || card.getValue() =="WILD") {
+        while (!newColor.equals("RED") && !newColor.equals("BLUE") && !newColor.equals("GREEN") && !newColor.equals("YELLOW")) {
+            System.out.println("Color no válido. Elige un color válido (RED, BLUE, GREEN, YELLOW): ");
+            newColor = scanner.nextLine().toUpperCase();
         }
-        else {
-            threadPlayMachine.setHasPlayerPlayed(true);
+        String currentColor = newColor;//no estoy segura de eso porque current color ya se habia usado en otra clase ;(
+        System.out.println("El nuevo color es " + currentColor);
+
+    }
+
+    public void isWildCards(Card card, ThreadPlayMachine threadPlayMachine, Player player){
+        String cardValue = card.getValue();
+
+        switch (cardValue) {
+            case "SKIP":
+                threadPlayMachine.setHasPlayerPlayed(false);
+                System.out.println("\nUtilizaste una carta de Skip.\n");
+                break;
+            case "REVERSE":
+                threadPlayMachine.setHasPlayerPlayed(false);
+                System.out.println("\nUtilizaste una carta de Reverse.\n");
+                break;
+            case "TWO_WILD_DRAW":
+                eatCard(player, 2);
+                System.out.println("\nUtilizaste un TWO_WILD_DRAW, " + player.getTypePlayer() + " comió 2 cartas.\n");
+                threadPlayMachine.setHasPlayerPlayed(true);
+                break;
+            case "WILD":
+                alertBox.showMessage("Cambio de color","Escribe a que color lo quieres cambiar");
+                changeColor();
+                threadPlayMachine.setHasPlayerPlayed(true);
+                break;
+            case "FOUR_WILD_DRAW":
+                eatCard(player, 4);
+                System.out.println("\nUtilizaste un FOUR_WILD_DRAW, " + player.getTypePlayer() + " comió 4 cartas.\n");
+                threadPlayMachine.setHasPlayerPlayed(true);
+                break;
+            default:
+                threadPlayMachine.setHasPlayerPlayed(true);
+                break;
         }
     }
 

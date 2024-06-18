@@ -70,7 +70,7 @@ public class Card {
     }
 
     public boolean isWildCard() {
-        return value.equals("WILD") || value.equals("FOUR_WILD_DRAW");
+        return value.equals("WILD") || value.equals("FOUR_WILD_DRAW") || value.equals("TWO_WILD_DRAW") || value.equals("SKIP") || value.equals("RESERVE");
     }
     @Override
     public String toString() {
