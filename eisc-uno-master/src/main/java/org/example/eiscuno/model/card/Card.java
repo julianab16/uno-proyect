@@ -52,6 +52,9 @@ public class Card {
         return cardImageView;
     }
 
+    public boolean isNumberCard() {
+        return value.matches("[0-9]");
+    }
     /**
      * Gets the image of the card.
      *
@@ -69,8 +72,16 @@ public class Card {
         return color;
     }
 
+    public boolean isReverseCard() {
+        return value.equals("REVERSE");
+    }
+
+    public boolean isSkipCard() {
+        return value.equals("SKIP");
+    }
+
     public boolean isWildCard() {
-        return value.equals("WILD") || value.equals("FOUR_WILD_DRAW");
+        return value.equals("WILD") || value.equals("FOUR_WILD_DRAW") ||value.equals("TWO_WILD_DRAW");
     }
     @Override
     public String toString() {
