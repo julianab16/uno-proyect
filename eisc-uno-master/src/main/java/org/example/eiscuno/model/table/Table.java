@@ -10,15 +10,26 @@ import java.util.ArrayList;
  */
 public class Table {
     private ArrayList<Card> cardsTable;
+    private String currentColor; // Nuevo atributo para el color actual
     public AlertBox alertBox = new AlertBox();
+    private String wildColor; // Variable para almacenar el color seleccionado por el jugador
 
     /**
      * Constructs a new Table object with no cards on it.
      */
     public Table(){
-        this.cardsTable = new ArrayList<Card>();
+        this.cardsTable = new ArrayList<>();
+        this.currentColor = null; // Inicialmente no hay color seleccionado
     }
 
+
+    public void setWildColor(String color) {
+        this.wildColor = color;
+    }
+
+    public String getWildColor() {
+        return wildColor;
+    }
     /**
      * Adds a card to the table.
      *
@@ -26,6 +37,9 @@ public class Table {
      */
     public void addCardOnTheTable(Card card){
         this.cardsTable.add(card);
+        if (!card.isWildCard()) {
+            this.currentColor = card.getColor(); // Actualizar el color actual si no es Wild
+        }
     }
 
     /**
@@ -41,6 +55,25 @@ public class Table {
         }
         return this.cardsTable.get(this.cardsTable.size()-1);
     }
+
+    /**
+     * Gets the current color on the table.
+     *
+     * @return The current color on the table.
+     */
+    public String getCurrentColor() {
+        return currentColor;
+    }
+
+    /**
+     * Sets the current color on the table.
+     *
+     * @param currentColor The color to set as current on the table.
+     */
+    public void setCurrentColor(String currentColor) {
+        this.currentColor = currentColor;
+    }
+
     public Card getTopCard() {
         if (!cardsTable.isEmpty()) {
             return cardsTable.get(cardsTable.size() - 1);

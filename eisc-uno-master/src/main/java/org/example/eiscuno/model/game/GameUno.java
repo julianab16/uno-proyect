@@ -7,6 +7,7 @@ import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.machine.ThreadPlayMachine;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
+import org.example.eiscuno.view.ColorSelectionDialog;
 import org.example.eiscuno.view.GameUnoStage;
 
 /**
@@ -69,11 +70,16 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void playCard(Card card) {
-        // Verificar si la carta es un comodín, Reverse o Skip
-        if (card.isWildCard() || card.isReverseCard() || card.isSkipCard()) {
-            throw new IllegalArgumentException("Solo se permiten cartas de números y colores, no comodines, Reverse o Skip.");
-        }
-        // Determinar el tipo de jugador que está jugando la carta
+            // Agregar la carta a la mesa
+            this.table.addCardOnTheTable(card);
+
+            // Si es un comodín, mostrar ventana emergente para seleccionar color
+            if (card.isWildCard()) {
+                openColorSelectionDialog();
+            } else {
+                // Si no es un comodín, seguir con el siguiente turno (máquina)
+                nextTurn();
+            }
         String playerType = humanPlayer.getTypePlayer();
         String playerMachine = machinePlayer.getTypePlayer();
         // Agregar la carta a la mesa
@@ -81,6 +87,28 @@ public class GameUno implements IGameUno {
         // Realizar acciones posteriores al movimiento
         postMoveActions(playerType);
         postMoveActions(playerMachine);
+    }
+    private void openColorSelectionDialog() {
+        ColorSelectionDialog dialog = new ColorSelectionDialog();
+        dialog.setOnCloseRequest(event -> {
+            // Obtener el color seleccionado por el jugador
+            String selectedColor = dialog.getSelectedColor();
+            System.out.println("Elegiste: " + selectedColor);
+
+            // Establecer el color seleccionado en la mesa para el siguiente turno
+            table.setWildColor(selectedColor);
+
+            // Avanzar al siguiente turno después de seleccionar el color
+            nextTurn();
+        });
+        dialog.showAndWait();
+    }
+    private void nextTurn() {
+        // Obtener el tipo de jugador que está jugando el siguiente turno
+        String playerType = machinePlayer.getTypePlayer();
+
+        // Realizar acciones posteriores al movimiento para la máquina
+        postMoveActions(playerType);
     }
     /**
      * Handles the scenario when a player shouts "Uno", forcing the other player to draw a card.

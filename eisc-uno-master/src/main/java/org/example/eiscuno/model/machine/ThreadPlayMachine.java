@@ -56,11 +56,10 @@ public class ThreadPlayMachine extends Thread {
             table.addCardOnTheTable(playableCard);
             tableImageView.setImage(playableCard.getImage());
             machinePlayer.getCardsPlayer().remove(playableCard);
-            isWildCards(playableCard,humanPlayer);
+            isWildCards(playableCard, humanPlayer);
         } else {
             gameUno.eatCard(machinePlayer, 1);
-            alertBox.showMessage("Turno", "La maquina comio una carta, turno del jugador \uD83C\uDFC3");
-
+            alertBox.showMessage("Turno", "La máquina comió una carta, turno del jugador \uD83C\uDFC3");
         }
         unoMachine();
         System.out.println("\n Cartas de la máquina: ");

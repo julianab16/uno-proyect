@@ -72,13 +72,18 @@ public class Player implements IPlayer {
      * @return a playable card, or null if no card can be played
      */
     public Card findPlayableCard(String currentColor, String currentValue) {
-        for (Card card : cardsPlayer) {
-            if (card.getColor() != null && card.getValue() != null) {
-                if (card.getColor().equals(currentColor) || card.getValue().equals(currentValue)) {
-                    return card;
-                }
+        for (Card card : getCardsPlayer()) {
+            if (card.getColor().equals(currentColor) || card.getValue().equals(currentValue)) {
+                return card;
             }
         }
+        // Si no se encuentra una carta coincidente, buscar una carta comodín
+        for (Card card : getCardsPlayer()) {
+            if (card.isWildCard()) {
+                return card;
+            }
+        }
+        // Si no se encuentra ninguna carta jugable, retornar null
         return null;
     }
     public void printCardsPlayer() {
