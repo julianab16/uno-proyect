@@ -1,5 +1,6 @@
 package org.example.eiscuno.model.game;
 
+import org.example.eiscuno.controller.GameUnoController;
 import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
@@ -19,6 +20,7 @@ public class GameUno implements IGameUno {
     private Player machinePlayer;
     private Deck deck;
     private Table table;
+    private GameUnoController gameUnoController = new GameUnoController();
     public AlertBox alertBox = new AlertBox();
 
     /**
@@ -69,14 +71,18 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void playCard(Card card) {
+        // Verificar si la carta es un comodín, Reverse o Skip
+        if (card.isWildCard() || card.isReverseCard() || card.isSkipCard()) {
+            throw new IllegalArgumentException("Solo se permiten cartas de números y colores, no comodines, Reverse o Skip.");
+        }
         // Determinar el tipo de jugador que está jugando la carta
         String playerType = humanPlayer.getTypePlayer();
-        String playerMachime = machinePlayer.getTypePlayer();
+        String playerMachine = machinePlayer.getTypePlayer();
         // Agregar la carta a la mesa
         this.table.addCardOnTheTable(card);
         // Realizar acciones posteriores al movimiento
         postMoveActions(playerType);
-        postMoveActions(playerMachime);
+        postMoveActions(playerMachine);
     }
     /**
      * Handles the scenario when a player shouts "Uno", forcing the other player to draw a card.
@@ -135,72 +141,45 @@ public class GameUno implements IGameUno {
                 card.getValue().equals(topCard.getValue()) ||
                 card.isWildCard();
     }
-
-    private void changeColor(){//gente se supone que aca usa una funcion que permite escribir po rmedio del teclado el color que a que lo quiere cambiar
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Elige un nuevo color (RED, BLUE, GREEN, YELLOW): ");
-        String newColor = scanner.nextLine().toUpperCase();
-
-        while (!newColor.equals("RED") && !newColor.equals("BLUE") && !newColor.equals("GREEN") && !newColor.equals("YELLOW")) {
-            System.out.println("Color no válido. Elige un color válido (RED, BLUE, GREEN, YELLOW): ");
-            newColor = scanner.nextLine().toUpperCase();
-        }
-        String currentColor = newColor;//no estoy segura de eso porque current color ya se habia usado en otra clase ;(
-        System.out.println("El nuevo color es " + currentColor);
-
-    }
-
     public void isWildCards(Card card, ThreadPlayMachine threadPlayMachine, Player player){
-        String cardValue = card.getValue();
+        if (card.getValue() == "SKIP"){
+            threadPlayMachine.setHasPlayerPlayed(false);
+            System.out.println("\nUtilizaste una carta de Skip.\n");
+        } else if (card.getValue() =="RESERVE") {
+            threadPlayMachine.setHasPlayerPlayed(false);
+            System.out.println("\nUtilizaste una carta de Reverse.\n");
+        } else if (card.getValue() =="TWO_WILD_DRAW") {
+            eatCard(player, 2);
+            System.out.println("\nUtilizasta un TWO_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas\n");
+            threadPlayMachine.setHasPlayerPlayed(true);
+        } else if (card.getValue() =="WILD"){
 
-        switch (cardValue) {
-            case "SKIP":
-                threadPlayMachine.setHasPlayerPlayed(false);
-                System.out.println("\nUtilizaste una carta de Skip.\n");
-                break;
-            case "REVERSE":
-                threadPlayMachine.setHasPlayerPlayed(false);
-                System.out.println("\nUtilizaste una carta de Reverse.\n");
-                break;
-            case "TWO_WILD_DRAW":
-                eatCard(player, 2);
-                System.out.println("\nUtilizaste un TWO_WILD_DRAW, " + player.getTypePlayer() + " comió 2 cartas.\n");
-                threadPlayMachine.setHasPlayerPlayed(true);
-                break;
-            case "WILD":
-                alertBox.showMessage("Cambio de color","Escribe a que color lo quieres cambiar");
-                changeColor();
-                threadPlayMachine.setHasPlayerPlayed(true);
-                break;
-            case "FOUR_WILD_DRAW":
-                eatCard(player, 4);
-                System.out.println("\nUtilizaste un FOUR_WILD_DRAW, " + player.getTypePlayer() + " comió 4 cartas.\n");
-                threadPlayMachine.setHasPlayerPlayed(true);
-                break;
-            default:
-                threadPlayMachine.setHasPlayerPlayed(true);
-                break;
+        }else if (card.getValue() == "FOUR_WILD_DRAW" || card.getValue() =="WILD") {
+        }
+        else {
+            threadPlayMachine.setHasPlayerPlayed(true);
         }
     }
 
-    /**
-     * Verifica si un jugador ha ganado después de jugar una carta.
-     *
-     * @param playerType El tipo de jugador que realizó el movimiento.
-     */
-    private void postMoveActions(String playerType) {
-        if (playerType.equals(humanPlayer.getTypePlayer())) {
-            if (humanPlayer.getCardsPlayer().isEmpty()) {
-                alertBox.showMessage("GANADOR", "Has ganado! \uD83C\uDFC6");
-                System.out.println("\nFin de la partida!\n");
-                isGameOver();
-            }
-        } else if (playerType.equals(machinePlayer.getTypePlayer())) {
-            if (machinePlayer.getCardsPlayer().isEmpty()) {
-                alertBox.showMessage("GAME OVER", "La maquina ha ganado! \uD83E\uDD16 ");
-                System.out.println("\nFin de la partida!\n");
-                isGameOver();
+
+            /**
+             * Verifica si un jugador ha ganado después de jugar una carta.
+             *
+             * @param playerType El tipo de jugador que realizó el movimiento.
+             */
+            private void postMoveActions (String playerType){
+                if (playerType.equals(humanPlayer.getTypePlayer())) {
+                    if (humanPlayer.getCardsPlayer().isEmpty()) {
+                        alertBox.showMessage("GANADOR", "Has ganado! \uD83C\uDFC6");
+                        System.out.println("\nFin de la partida!\n");
+                        isGameOver();
+                    }
+                } else if (playerType.equals(machinePlayer.getTypePlayer())) {
+                    if (machinePlayer.getCardsPlayer().isEmpty()) {
+                        alertBox.showMessage("GAME OVER", "La maquina ha ganado! \uD83E\uDD16 ");
+                        System.out.println("\nFin de la partida!\n");
+                        isGameOver();
+                    }
+                }
             }
         }
-    }
-}

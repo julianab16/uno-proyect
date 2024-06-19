@@ -67,7 +67,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
         t.start();
 
-        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView, this.deck, this.gameUno);
+        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView, this.deck, this.gameUno, this.threadPlayMachine, this.humanPlayer);
         threadPlayMachine.start();
         System.out.println(" Tus cartas: ");
         humanPlayer.printCardsPlayer();
@@ -103,7 +103,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                 if (!primeraCartaPuesta) {
                     tableImageView.setImage(card.getImage());
                     humanPlayer.removeCard(findPosCardsHumanPlayer(card));
-                    threadPlayMachine.setHasPlayerPlayed(true);
+                    gameUno.isWildCards(card,threadPlayMachine,machinePlayer);
                     gameUno.playCard(card);
                     printCardsHumanPlayer();
                     primeraCartaPuesta = true;
@@ -178,7 +178,6 @@ public class GameUnoController implements ThreadSingUNOMachineI {
      */
     @FXML
     void onHandleNext(ActionEvent event) {
-
         if (this.posInitCardToShow < this.humanPlayer.getCardsPlayer().size() - 4) {
             this.posInitCardToShow++;
             printCardsHumanPlayer();
