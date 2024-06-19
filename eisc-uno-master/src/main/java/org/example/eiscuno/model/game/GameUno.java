@@ -69,12 +69,20 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void playCard(Card card) {
+        // Verificar si la carta es un comodín, Reverse o Skip
+        if (card.isWildCard() || card.isReverseCard() || card.isSkipCard()) {
+            throw new IllegalArgumentException("Solo se permiten cartas de números y colores, no comodines, Reverse o Skip.");
+        }
+        // Determinar el tipo de jugador que está jugando la carta
         String playerType = humanPlayer.getTypePlayer();
-        String playerMachime = machinePlayer.getTypePlayer();
+        String playerMachine = machinePlayer.getTypePlayer();
+        // Agregar la carta a la mesa
         this.table.addCardOnTheTable(card);
+        // Realizar acciones posteriores al movimiento
         postMoveActions(playerType);
-        postMoveActions(playerMachime);
-    }
+        postMoveActions(playerMachine);
+}
+
     /**
      * Handles the scenario when a player shouts "Uno", forcing the other player to draw a card.
      *

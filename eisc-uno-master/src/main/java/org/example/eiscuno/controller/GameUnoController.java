@@ -100,33 +100,43 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             ImageView cardImageView = card.getCard();
 
             cardImageView.setOnMouseClicked((MouseEvent event) -> {
-                if (!primeraCartaPuesta) {
-                    tableImageView.setImage(card.getImage());
-                    humanPlayer.removeCard(findPosCardsHumanPlayer(card));
-                    gameUno.isWildCards(card,threadPlayMachine,machinePlayer);
-                    gameUno.playCard(card);
-                    printCardsHumanPlayer();
-                    primeraCartaPuesta = true;
+                try {
+                    if (!primeraCartaPuesta) {
+                        if (canPlayNumberCard(card)) {
+                            tableImageView.setImage(card.getImage());
+                            humanPlayer.removeCard(findPosCardsHumanPlayer(card));
+                            gameUno.isWildCards(card, threadPlayMachine, machinePlayer);
+                            gameUno.playCard(card);
+                            printCardsHumanPlayer();
+                            primeraCartaPuesta = true;
 
-                    System.out.println("\n Tus cartas: ");
-                    humanPlayer.printCardsPlayer();
-
-                } else if (gameUno.canPlayCard(card)) {
-                    tableImageView.setImage(card.getImage());
-                    humanPlayer.removeCard(findPosCardsHumanPlayer(card));
-                    gameUno.isWildCards(card,threadPlayMachine, machinePlayer);
-                    gameUno.playCard(card);
-                    printCardsHumanPlayer();
-                    System.out.println("\n Tus cartas: ");
-                    humanPlayer.printCardsPlayer();
-                    deck.discardCard(card);
-                    Card currentCard = card;
-                } else {
-                    alertBox.showMessageError("Error", "Carta invalida. Intenta otra vez. \uD83C\uDCCF");
+                            System.out.println("\n Tus cartas: ");
+                            humanPlayer.printCardsPlayer();
+                        } else {
+                            alertBox.showMessageError("Error", "Carta inválida. Intenta otra vez. \uD83C\uDCCF");
+                        }
+                    } else if (gameUno.canPlayCard(card)) {
+                        tableImageView.setImage(card.getImage());
+                        humanPlayer.removeCard(findPosCardsHumanPlayer(card));
+                        gameUno.isWildCards(card, threadPlayMachine, machinePlayer);
+                        gameUno.playCard(card);
+                        printCardsHumanPlayer();
+                        System.out.println("\n Tus cartas: ");
+                        humanPlayer.printCardsPlayer();
+                        deck.discardCard(card);
+                        Card currentCard = card;
+                    } else {
+                        alertBox.showMessageError("Error", "Carta invalida. Intenta otra vez. \uD83C\uDCCF");
+                    }
+                } catch (IllegalArgumentException e) {
+                    alertBox.showMessageError("Error", e.getMessage());
                 }
             });
             this.gridPaneCardsPlayer.add(cardImageView, i, 0);
         }
+    }
+    private boolean canPlayNumberCard(Card card) {
+        return !card.isReverseCard() && !card.isWildCard() &&  !card.isSkipCard();
     }
 
     /**
