@@ -1,5 +1,6 @@
 package org.example.eiscuno.model.game;
 
+import org.example.eiscuno.controller.GameUnoController;
 import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
@@ -17,6 +18,7 @@ public class GameUno implements IGameUno {
     private Player machinePlayer;
     private Deck deck;
     private Table table;
+    private GameUnoController gameUnoController = new GameUnoController();
     public AlertBox alertBox = new AlertBox();
 
     /**
@@ -143,7 +145,7 @@ public class GameUno implements IGameUno {
             System.out.println("\nUtilizaste una carta de Reverse.\n");
         } else if (card.getValue() =="TWO_WILD_DRAW") {
             eatCard(player, 2);
-            System.out.println("\nUtilizasta un TWO_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas");
+            System.out.println("\nUtilizasta un TWO_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas\n");
             threadPlayMachine.setHasPlayerPlayed(true);
         } else if (card.getValue() =="WILD") {
 
