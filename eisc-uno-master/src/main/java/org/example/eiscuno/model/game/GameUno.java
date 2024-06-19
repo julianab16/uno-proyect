@@ -69,12 +69,9 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void playCard(Card card) {
-        // Determinar el tipo de jugador que está jugando la carta
         String playerType = humanPlayer.getTypePlayer();
         String playerMachime = machinePlayer.getTypePlayer();
-        // Agregar la carta a la mesa
         this.table.addCardOnTheTable(card);
-        // Realizar acciones posteriores al movimiento
         postMoveActions(playerType);
         postMoveActions(playerMachime);
     }

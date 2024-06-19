@@ -49,22 +49,31 @@ public class ThreadPlayMachine extends Thread {
         Card topCard = table.getCurrentCardOnTheTable();
         String currentColor = topCard.getColor();
         String currentValue = topCard.getValue();
-
         Card playableCard = machinePlayer.findPlayableCard(currentColor, currentValue);
 
-        if (playableCard != null) {
-            table.addCardOnTheTable(playableCard);
-            tableImageView.setImage(playableCard.getImage());
-            machinePlayer.getCardsPlayer().remove(playableCard);
-            isWildCards(playableCard,humanPlayer);
-        } else {
-            gameUno.eatCard(machinePlayer, 1);
-            alertBox.showMessage("Turno", "La maquina comio una carta, turno del jugador \uD83C\uDFC3");
-
+        String cardColor = "NONE";
+        String cardValue = "FOUR_WILD_DRAW";
+        Card fourCard = machinePlayer.findPlayableCard(cardColor, cardValue);
+        if (fourCard != null) {
+            table.addCardOnTheTable(fourCard);
+            tableImageView.setImage(fourCard.getImage());
+            machinePlayer.getCardsPlayer().remove(fourCard);
         }
-        unoMachine();
-        System.out.println("\n Cartas de la máquina: ");
-        machinePlayer.printCardsPlayer();
+        else {
+            if (playableCard != null) {
+                table.addCardOnTheTable(playableCard);
+                tableImageView.setImage(playableCard.getImage());
+                machinePlayer.getCardsPlayer().remove(playableCard);
+                isWildCards(playableCard, humanPlayer);
+            } else {
+                gameUno.eatCard(machinePlayer, 1);
+                alertBox.showMessage("Turno", "La maquina comio una carta, turno del jugador \uD83C\uDFC3");
+
+            }
+            unoMachine();
+            System.out.println("\n Cartas de la máquina: ");
+            machinePlayer.printCardsPlayer();
+        }
     }
 
     public void unoMachine() {
@@ -79,7 +88,7 @@ public class ThreadPlayMachine extends Thread {
         } else if (card.getValue() =="RESERVE") {
             run();
             setHasPlayerPlayed(false);
-            System.out.println("\nLa maquina utilizo  una carta de Reverse.\n");
+            System.out.println("\nLa maquina utilizo una carta de Reverse.\n");
         } else if (card.getValue() =="TWO_WILD_DRAW") {
             gameUno.eatCard(player, 2);
             System.out.println("\nLa maquina utilizo  un TWO_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas\n");
@@ -90,6 +99,13 @@ public class ThreadPlayMachine extends Thread {
         else {
             setHasPlayerPlayed(true);
         }
+    }
+    public void fourWild(){
+        String currentColor = "NONE";
+        String currentValue = "FOUR_WILD_DRAW";
+        Card playableCard = machinePlayer.findPlayableCard(currentColor, currentValue);
+
+
     }
     public void setHasPlayerPlayed(boolean hasPlayerPlayed) {
         this.hasPlayerPlayed = hasPlayerPlayed;
