@@ -21,6 +21,7 @@ public class GameUno implements IGameUno {
     private Table table;
     private GameUnoController gameUnoController = new GameUnoController();
     public AlertBox alertBox = new AlertBox();
+    private ThreadPlayMachine threadPlayMachine; // Declaración de threadPlayMachine
 
     /**
      * Constructs a new GameUno instance.
@@ -104,6 +105,10 @@ public class GameUno implements IGameUno {
         dialog.showAndWait();
     }
     private void nextTurn() {
+        // Indicar que la máquina debe jugar
+        //threadPlayMachine.setHasPlayerPlayed(true);
+        //threadPlayMachine.run();
+
         // Obtener el tipo de jugador que está jugando el siguiente turno
         String playerType = machinePlayer.getTypePlayer();
 
@@ -177,11 +182,16 @@ public class GameUno implements IGameUno {
             System.out.println("\nUtilizaste una carta de Reverse.\n");
         } else if (card.getValue() =="TWO_WILD_DRAW") {
             eatCard(player, 2);
-            System.out.println("\nUtilizasta un TWO_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas\n");
+            System.out.println("\nUtilizaste un TWO_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas\n");
             threadPlayMachine.setHasPlayerPlayed(true);
         } else if (card.getValue() =="WILD") {
-
-        }else if (card.getValue() == "FOUR_WILD_DRAW" || card.getValue() =="WILD") {
+            openColorSelectionDialog();//Falta que el color elegido por el jugador se use para que el jugador tenga que poner el mismo
+            System.out.println("\nUtilizaste un WILD, ");
+        }else if (card.getValue() == "FOUR_WILD_DRAW") {
+            eatCard(player, 4);
+            openColorSelectionDialog();//Falta que el color elegido por el jugador se use para que el jugador tenga que poner el mismo
+            System.out.println("\nUtilizaste un FOUR_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas\n");
+            threadPlayMachine.setHasPlayerPlayed(true);
         }
         else {
             threadPlayMachine.setHasPlayerPlayed(true);

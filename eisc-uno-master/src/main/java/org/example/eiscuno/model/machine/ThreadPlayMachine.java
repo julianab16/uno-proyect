@@ -7,6 +7,9 @@ import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.game.GameUno;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
+import java.util.HashMap;
+
+import java.util.Map;
 
 public class ThreadPlayMachine extends Thread {
     private Table table;
@@ -46,24 +49,65 @@ public class ThreadPlayMachine extends Thread {
     }
 
     private void putCardOnTheTable(){
-        Card topCard = table.getCurrentCardOnTheTable();
-        String currentColor = topCard.getColor();
-        String currentValue = topCard.getValue();
+        try {
+            Card topCard = table.getCurrentCardOnTheTable();
+            String currentColor = topCard.getColor();
+            String currentValue = topCard.getValue();
 
-        Card playableCard = machinePlayer.findPlayableCard(currentColor, currentValue);
+            Card playableCard = machinePlayer.findPlayableCard(currentColor, currentValue);
 
-        if (playableCard != null) {
-            table.addCardOnTheTable(playableCard);
-            tableImageView.setImage(playableCard.getImage());
-            machinePlayer.getCardsPlayer().remove(playableCard);
-            isWildCards(playableCard, humanPlayer);
-        } else {
-            gameUno.eatCard(machinePlayer, 1);
-            alertBox.showMessage("Turno", "La máquina comió una carta, turno del jugador \uD83C\uDFC3");
+            if (playableCard != null) {
+                table.addCardOnTheTable(playableCard);
+                tableImageView.setImage(playableCard.getImage());
+                machinePlayer.getCardsPlayer().remove(playableCard);
+                isWildCards(playableCard, humanPlayer);
+            } else {
+                gameUno.eatCard(machinePlayer, 1);
+                alertBox.showMessage("Turno", "La máquina comió una carta, turno del jugador \uD83C\uDFC3");
+            }
+
+            unoMachine();
+            System.out.println("\nCartas de la máquina: ");
+            machinePlayer.printCardsPlayer();
+        } catch (IndexOutOfBoundsException e) {
+            // Manejar la excepción cuando no hay cartas en la mesa
+            System.out.println("No hay cartas en la mesa.");
+            // Aquí podrías tomar acciones adicionales si es necesario
         }
-        unoMachine();
-        System.out.println("\n Cartas de la máquina: ");
-        machinePlayer.printCardsPlayer();
+    }
+
+    private String chooseBestColor() {
+        // Map to count cards per color
+        Map<String, Integer> colorCount = new HashMap<>();
+        colorCount.put("Azul", 0);
+        colorCount.put("Verde", 0);
+        colorCount.put("Rojo", 0);
+        colorCount.put("Amarillo", 0);
+
+        // Count cards of each color
+        for (Card card : machinePlayer.getCardsPlayer()) {
+            String color = card.getColor();
+            if (colorCount.containsKey(color)) {
+                colorCount.put(color, colorCount.get(color) + 1);
+            }
+        }
+
+        // Find color with the most cards
+        int maxCount = -1;
+        String bestColor = "";
+        for (Map.Entry<String, Integer> entry : colorCount.entrySet()) {
+            if (entry.getValue() > maxCount) {
+                maxCount = entry.getValue();
+                bestColor = entry.getKey();
+            } else if (entry.getValue() == maxCount) {
+                // If tie, choose randomly between the tied colors
+                if (Math.random() < 0.5) {
+                    bestColor = entry.getKey();
+                }
+            }
+        }
+
+        return bestColor;
     }
 
     public void unoMachine() {
@@ -72,21 +116,33 @@ public class ThreadPlayMachine extends Thread {
         }
     }
     public void isWildCards(Card card, Player player){
-        if (card.getValue() == "SKIP"){
+        if (card.getValue().equals("SKIP")) {
             run();
-            System.out.println("\nLa maquina utilizo una carta de Skip.\n");
-        } else if (card.getValue() =="RESERVE") {
+            System.out.println("\nLa máquina utilizó una carta de Skip.\n");
+            setHasPlayerPlayed(true);
+        } else if (card.getValue().equals("REVERSE")) {
             run();
             setHasPlayerPlayed(false);
-            System.out.println("\nLa maquina utilizo  una carta de Reverse.\n");
-        } else if (card.getValue() =="TWO_WILD_DRAW") {
+            System.out.println("\nLa máquina utilizó una carta de Reverse.\n");
+        } else if (card.getValue().equals("TWO_WILD_DRAW")) {
             gameUno.eatCard(player, 2);
-            System.out.println("\nLa maquina utilizo  un TWO_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas\n");
-        } else if (card.getValue() =="WILD") {
-
-        }else if (card.getValue() == "FOUR_WILD_DRAW" || card.getValue() =="WILD") {
-        }
-        else {
+            System.out.println("\nLa máquina utilizó un TWO_WILD_DRAW, " + player.getTypePlayer() + " comió 2 cartas.\n");
+            setHasPlayerPlayed(true);
+        } else if (card.getValue().equals("WILD")) {
+            // Select color based on most cards of that color
+            String chosenColor = chooseBestColor();
+            table.setCurrentColor(chosenColor);//Falta que el color elegido por la maquina se use para que el jugador tenga que poner el mismo
+            alertBox.showMessage("Color elegido", "La máquina ha elegido el color: " + chosenColor);
+            setHasPlayerPlayed(true);
+        } else if (card.getValue().equals("FOUR_WILD_DRAW")) {
+            // Select color based on most cards of that color
+            String chosenColor = chooseBestColor();
+            table.setCurrentColor(chosenColor);//Falta que el color elegido por la maquina se use para que el jugador tenga que poner el mismo
+            alertBox.showMessage("Color elegido", "La máquina ha elegido el color: " + chosenColor);
+            gameUno.eatCard(player, 4); // Hace que el jugador humano coma 4 cartas
+            System.out.println("\nLa máquina utilizó un FOUR_WILD_DRAW, " + player.getTypePlayer() + " comió 4 cartas.\n");
+            setHasPlayerPlayed(true);
+        } else {
             setHasPlayerPlayed(true);
         }
     }

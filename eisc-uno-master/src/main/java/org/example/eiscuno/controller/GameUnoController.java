@@ -104,25 +104,35 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                     if (!primeraCartaPuesta) {
                         if (canPlayNumberCard(card)) {
                             tableImageView.setImage(card.getImage());
-                            humanPlayer.removeCard(findPosCardsHumanPlayer(card));
-                            threadPlayMachine.setHasPlayerPlayed(true);
-                            gameUno.playCard(card);
-                            printCardsHumanPlayer();
-                            primeraCartaPuesta = true;
-                            System.out.println("\nTus cartas: ");
-                            humanPlayer.printCardsPlayer();
+                            int cardIndex = findPosCardsHumanPlayer(card);
+                            if (cardIndex != -1) {
+                                humanPlayer.removeCard(cardIndex);
+                                threadPlayMachine.setHasPlayerPlayed(true);
+                                gameUno.playCard(card);
+                                printCardsHumanPlayer();
+                                primeraCartaPuesta = true;
+                                System.out.println("\nTus cartas: ");
+                                humanPlayer.printCardsPlayer();
+                            } else {
+                                alertBox.showMessageError("Error", "Carta no encontrada. Intenta otra vez. \uD83C\uDCCF");
+                            }
                         } else {
                             alertBox.showMessageError("Error", "Carta inválida. Intenta otra vez. \uD83C\uDCCF");
                         }
                     } else if (gameUno.canPlayCard(card)) {
                         tableImageView.setImage(card.getImage());
-                        humanPlayer.removeCard(findPosCardsHumanPlayer(card));
-                        gameUno.isWildCards(card, threadPlayMachine, machinePlayer);
-                        gameUno.playCard(card);
-                        printCardsHumanPlayer();
-                        System.out.println("\nTus cartas: ");
-                        humanPlayer.printCardsPlayer();
-                        deck.discardCard(card);
+                        int cardIndex = findPosCardsHumanPlayer(card);
+                        if (cardIndex != -1) {
+                            humanPlayer.removeCard(cardIndex);
+                            gameUno.isWildCards(card, threadPlayMachine, machinePlayer);
+                            gameUno.playCard(card);
+                            printCardsHumanPlayer();
+                            System.out.println("\nTus cartas: ");
+                            humanPlayer.printCardsPlayer();
+                            deck.discardCard(card);
+                        } else {
+                            alertBox.showMessageError("Error", "Carta no encontrada. Intenta otra vez. \uD83C\uDCCF");
+                        }
                     } else {
                         alertBox.showMessageError("Error", "Carta inválida. Intenta otra vez. \uD83C\uDCCF");
                     }
