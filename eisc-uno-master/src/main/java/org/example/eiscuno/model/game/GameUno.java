@@ -48,8 +48,8 @@ public class GameUno implements IGameUno {
             Card currentCard = deck.takeCard();
             deck.discardCard(currentCard);
         }
-
     }
+
     /**
      * Allows a player to draw a specified number of cards from the deck.
      *
@@ -62,6 +62,7 @@ public class GameUno implements IGameUno {
             player.addCard(this.deck.takeCard());
         }
     }
+
     /**
      * Places a card on the table during the game.
      *
@@ -69,10 +70,6 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void playCard(Card card) {
-        // Verificar si la carta es un comodín, Reverse o Skip
-        if (card.isWildCard() || card.isReverseCard() || card.isSkipCard()) {
-            throw new IllegalArgumentException("Solo se permiten cartas de números y colores, no comodines, Reverse o Skip.");
-        }
         // Determinar el tipo de jugador que está jugando la carta
         String playerType = humanPlayer.getTypePlayer();
         String playerMachine = machinePlayer.getTypePlayer();
@@ -81,7 +78,7 @@ public class GameUno implements IGameUno {
         // Realizar acciones posteriores al movimiento
         postMoveActions(playerType);
         postMoveActions(playerMachine);
-}
+    }
 
     /**
      * Handles the scenario when a player shouts "Uno", forcing the other player to draw a card.
@@ -100,6 +97,7 @@ public class GameUno implements IGameUno {
             humanPlayer.printCardsPlayer();
         }
     }
+
     /**
      * Retrieves the current visible cards of the human player starting from a specific position.
      *
@@ -117,6 +115,7 @@ public class GameUno implements IGameUno {
         }
         return cards;
     }
+
     /**
      * Checks if the game is over.
      *
@@ -144,13 +143,13 @@ public class GameUno implements IGameUno {
     public void isWildCards(Card card, ThreadPlayMachine threadPlayMachine, Player player){
         if (card.getValue() == "SKIP"){
             threadPlayMachine.setHasPlayerPlayed(false);
-            System.out.println("\nUtilizaste una carta de Skip.\n");
+            System.out.println("\nUtilizaste una carta de Skip.");
         } else if (card.getValue() =="RESERVE") {
             threadPlayMachine.setHasPlayerPlayed(false);
-            System.out.println("\nUtilizaste una carta de Reverse.\n");
+            System.out.println("\nUtilizaste una carta de Reverse.");
         } else if (card.getValue() =="TWO_WILD_DRAW") {
             eatCard(player, 2);
-            System.out.println("\nUtilizasta un TWO_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas\n");
+            System.out.println("\nUtilizasta un TWO_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas");
             threadPlayMachine.setHasPlayerPlayed(true);
         } else if (card.getValue() =="WILD") {
 
@@ -166,7 +165,7 @@ public class GameUno implements IGameUno {
      *
      * @param playerType El tipo de jugador que realizó el movimiento.
      */
-    private void postMoveActions(String playerType) {
+    public void postMoveActions(String playerType) {
         if (playerType.equals(humanPlayer.getTypePlayer())) {
             if (humanPlayer.getCardsPlayer().isEmpty()) {
                 alertBox.showMessage("GANADOR", "Has ganado! \uD83C\uDFC6");

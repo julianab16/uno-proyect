@@ -113,7 +113,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                             System.out.println("\n Tus cartas: ");
                             humanPlayer.printCardsPlayer();
                         } else {
-                            alertBox.showMessageError("Error", "Carta inválida. Intenta otra vez. \uD83C\uDCCF");
+                            alertBox.showMessageError("Error", "Para iniciar solo se permiten cartas de números y colores, no comodines, Reverse o Skip. \uD83C\uDCCF");
                         }
                     } else if (gameUno.canPlayCard(card)) {
                         tableImageView.setImage(card.getImage());
@@ -141,7 +141,6 @@ public class GameUnoController implements ThreadSingUNOMachineI {
 
     /**
      * Finds the position of a specific card in the human player's hand.
-     *
      * @param card the card to find
      * @return the position of the card, or -1 if not found
      */
