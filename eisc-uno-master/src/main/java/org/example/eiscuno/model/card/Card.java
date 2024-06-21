@@ -16,7 +16,7 @@ public class Card {
     /**
      * Constructs a Card with the specified image URL and name.
      *
-     * @param url the URL of the card image
+     * @param url   the URL of the card image
      * @param value of the card
      * @param color the color of the card
      */
@@ -30,6 +30,7 @@ public class Card {
         this.image = new Image(String.valueOf(getClass().getResource(url)));
         this.cardImageView = createCardImageView();
     }
+
     /**
      * Creates and configures the ImageView for the card.
      *
@@ -68,19 +69,26 @@ public class Card {
     public String getColor() {
         return color;
     }
+
     public boolean isReverseCard() {
         return value.equals("RESERVE");
     }
+
     public boolean isSkipCard() {
         return value.equals("SKIP");
     }
+
     public boolean isWildCard() {
         return value.equals("WILD") || value.equals("FOUR_WILD_DRAW") || value.equals("TWO_WILD_DRAW");
+
     }
 
+    @Override
+    public String toString() {
+        return "Color: " + this.color + ", Valor: " + this.value;
 
-        @Override
-        public String toString () {
-            return "Color: " + this.color + ", Valor: " + this.value;
-        }
+    }
 }
+
+
+

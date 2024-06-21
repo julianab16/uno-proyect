@@ -3,6 +3,7 @@ package org.example.eiscuno.view;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,6 +29,9 @@ public class GameUnoStage extends Stage {
             throw new IOException("Error while loading FXML file", e);
         }
         Scene scene = new Scene(root);
+        getIcons().add(
+                new Image(
+                        String.valueOf(getClass().getResource("/org/example/eiscuno/cards-uno/deck_of_cards.png"))));
         // Configuring the stage
         setTitle("EISC Uno"); // Sets the title of the stage
         setScene(scene); // Sets the scene for the stage
