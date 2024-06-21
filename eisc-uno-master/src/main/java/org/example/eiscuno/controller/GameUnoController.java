@@ -33,6 +33,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     private GridPane gridPaneCardsPlayer;
     @FXML
     private ImageView tableImageView;
+
     @FXML
     private Button buttonBack;
     @FXML
@@ -65,13 +66,13 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     @FXML
     public void initialize() {
         initVariables();
-        tableImageView.setImage(table.firstCard().getImage());
+
+        this.tableImageView.setImage(this.table.firstCard().getImage());
+
         printCardsHumanPlayer();
         this.gameUno.startGame();
         printCardsHumanPlayer();
         this.gameUno.playCard(deck.takeCard());
-        this.tableImageView.setImage(this.table.getCurrentCardOnTheTable().getImage());
-
 
         threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer(),this);
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");

@@ -62,7 +62,6 @@ public class Table {
         }
     }
 
-
     public ArrayList<Card> getCardsTable() {
         return cardsTable;
     }
@@ -73,14 +72,18 @@ public class Table {
 
     public Card firstCard() {
         boolean t = true;
-        while (t) {
+        while (true) {
             Card card = deck.takeCard();
-            if (!card.isWildCard() && !card.isReverseCard() && !card.isSkipCard() && !card.isTwoWildCard()) {
-                this.cardsTable.add(card);
+            if (!card.isWildCard() && !card.isReverseCard() && !card.isSkipCard()  &&!card.isTwoWildCard()) {
+                System.out.println(card.isReverseCard());
+                System.out.println(card.isSkipCard());
+                System.out.println(card.isTwoWildCard());
+                System.out.println(card.isWildCard());
+                System.out.println(card.getValue());
+                System.out.println(card.getColor());
                 t = false;
                 return card;
             }
         }
-        return null;
     }
 }
