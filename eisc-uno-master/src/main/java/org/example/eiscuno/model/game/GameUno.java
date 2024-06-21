@@ -84,6 +84,12 @@ public class GameUno implements IGameUno {
         postMoveActions(playerMachine);
     }
 
+    /**
+     * Opens a color selection dialog for the specified card.
+     * When the dialog is closed, the selected color is set for the card.
+     *
+     * @param card the card for which to select a color
+     */
     private void openColorSelectionDialog(Card card) {
         ColorSelectionDialog dialog = new ColorSelectionDialog();
         dialog.setOnCloseRequest(event -> {
@@ -156,10 +162,19 @@ public class GameUno implements IGameUno {
         return card.getColor().equals(topCard.getColor()) ||
                 card.getValue().equals(topCard.getValue()) ||
                 (card.isSkipCard()  && (topCard.isSkipCard())) ||
-                (card.isTwoWildCrad()  && (topCard.isTwoWildCrad())) ||
+                (card.isTwoWildCard()  && (topCard.isTwoWildCard())) ||
                 (card.isReverseCard()  && (topCard.isReverseCard()))|| card.isWildCard();
     }
 
+    /**
+     * Handles special actions for wild cards in the game.
+     * Depending on the card's value, performs specific actions such as skipping turns, reversing play,
+     * making players draw cards, or opening a color selection dialog.
+     *
+     * @param card the card being played
+     * @param threadPlayMachine the thread managing machine's gameplay
+     * @param player the current player
+     */
     public void isWildCards(Card card, ThreadPlayMachine threadPlayMachine, Player player){
         if (card.getValue() == "SKIP"){
             System.out.println("\nUtilizaste una carta de Skip.");

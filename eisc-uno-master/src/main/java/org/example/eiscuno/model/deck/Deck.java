@@ -52,6 +52,12 @@ public class Deck {
         Collections.shuffle(deckOfCards);
     }
 
+    /**
+     * Gets the card value based on its name.
+     *
+     * @param name the name of the card
+     * @return the value of the card as a string
+     */
     private String getCardValue(String name) {
         if (name.matches(".*_[0-9]$")) {
             return name.substring(name.length() - 1);
@@ -70,6 +76,12 @@ public class Deck {
         }
     }
 
+    /**
+     * Gets the card color based on its name.
+     *
+     * @param name the name of the card
+     * @return the color of the card as a string
+     */
     private String getCardColor(String name){
         if(name.startsWith("GREEN")) {
             return "GREEN";

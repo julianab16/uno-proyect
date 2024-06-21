@@ -18,7 +18,7 @@ public class Table {
      */
     public Table(){
         this.cardsTable = new ArrayList<>();
-        this.currentColor = null; // Inicialmente no hay color seleccionado
+        this.currentColor = null;
     }
 
     /**
@@ -29,7 +29,7 @@ public class Table {
     public void addCardOnTheTable(Card card){
         this.cardsTable.add(card);
         if (!card.isWildCard()) {
-            this.currentColor = card.getColor(); // Actualizar el color actual si no es Wild
+            this.currentColor = card.getColor();
         }
     }
 
@@ -47,7 +47,11 @@ public class Table {
         return this.cardsTable.get(this.cardsTable.size()-1);
     }
 
-
+    /**
+     * Retrieves the top card from the table.
+     *
+     * @return The top card from the table, or null if the table is empty.
+     */
     public Card getTopCard() {
         if (!cardsTable.isEmpty()) {
             return cardsTable.get(cardsTable.size() - 1);
