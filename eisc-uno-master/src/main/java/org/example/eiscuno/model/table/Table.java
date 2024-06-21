@@ -10,13 +10,15 @@ import java.util.ArrayList;
  */
 public class Table {
     private ArrayList<Card> cardsTable;
+    private String currentColor;
     public AlertBox alertBox = new AlertBox();
 
     /**
      * Constructs a new Table object with no cards on it.
      */
     public Table(){
-        this.cardsTable = new ArrayList<Card>();
+        this.cardsTable = new ArrayList<>();
+        this.currentColor = null; // Inicialmente no hay color seleccionado
     }
 
     /**
@@ -26,6 +28,9 @@ public class Table {
      */
     public void addCardOnTheTable(Card card){
         this.cardsTable.add(card);
+        if (!card.isWildCard()) {
+            this.currentColor = card.getColor(); // Actualizar el color actual si no es Wild
+        }
     }
 
     /**
@@ -41,6 +46,8 @@ public class Table {
         }
         return this.cardsTable.get(this.cardsTable.size()-1);
     }
+
+
     public Card getTopCard() {
         if (!cardsTable.isEmpty()) {
             return cardsTable.get(cardsTable.size() - 1);
