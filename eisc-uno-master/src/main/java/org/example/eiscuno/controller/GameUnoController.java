@@ -331,11 +331,12 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                 System.out.println("\n¡Jugador dijo UNO más rápido!");
                 alertBox.showMessage("UNO", "¡Has dicho UNO más rápido! \uD83D\uDE04");
             }
+            machineTime = 0;
+            playerTime = 0;
+            machineSaidUno = false;
+            playerSaidUno = false;
         }
-        machineTime = 0;
-        playerTime = 0;
-        machineSaidUno = false;
-        playerSaidUno = false;
-        threadSingUNOMachine.setCondition(true);
+        //threadSingUNOMachine.setCondition(true);
+        threadSingUNOMachine.startThread();
     }
 }

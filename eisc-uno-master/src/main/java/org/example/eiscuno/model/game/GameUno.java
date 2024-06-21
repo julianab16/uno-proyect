@@ -152,9 +152,12 @@ public class GameUno implements IGameUno {
      */
     public boolean canPlayCard(Card card) {
         Card topCard = table.getTopCard();
+
         return card.getColor().equals(topCard.getColor()) ||
                 card.getValue().equals(topCard.getValue()) ||
-                card.getWildCardName(topCard).equals(topCard.getWildCardName(card)) || card.isWildCard();
+                (card.isSkipCard()  && (topCard.isSkipCard())) ||
+                (card.isTwoWildCrad()  && (topCard.isTwoWildCrad())) ||
+                (card.isReverseCard()  && (topCard.isReverseCard()))|| card.isWildCard();
     }
 
     public void isWildCards(Card card, ThreadPlayMachine threadPlayMachine, Player player){
@@ -174,14 +177,14 @@ public class GameUno implements IGameUno {
             threadPlayMachine.setHasPlayerPlayed(true);
 
         } else if (card.getValue() =="WILD") {
-            openColorSelectionDialog(card);//Falta que el color elegido por el jugador se use para que el jugador tenga que poner el mismo
+            openColorSelectionDialog(card);
             System.out.println("\nUtilizaste un WILD, ");
             threadPlayMachine.setHasPlayerPlayed(true);
 
         }else if (card.getValue() == "FOUR_WILD_DRAW") {
             eatCard(player, 4);
-            openColorSelectionDialog(card);//Falta que el color elegido por el jugador se use para que el jugador tenga que poner el mismo
-            System.out.println("\nUtilizaste un FOUR_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas");
+            openColorSelectionDialog(card);
+            System.out.println("\nUtilizaste un FOUR_WILD_DRAW, " +player.getTypePlayer()+ " comio 4 cartas");
             System.out.println("\nCartas de la máquina: ");
             machinePlayer.printCardsPlayer();
             threadPlayMachine.setHasPlayerPlayed(true);

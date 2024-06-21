@@ -75,19 +75,6 @@ public class Card {
         return value.equals("WILD") || value.equals("FOUR_WILD_DRAW");
     }
 
-    public String getWildCardName(Card card) {
-        String value = card.getValue();
-        if (value.startsWith("TWO_WILD_DRAW")) {
-            return "TWO_WILD_DRAW";
-        } else if(value.startsWith("SKIP")){
-            return "SKIP";
-        } else if (value.startsWith("RESERVE")) {
-            return "RESERVE";
-        } else {
-            return "NOT_WILD";
-        }
-    }
-
     @Override
     public String toString() {
         return "Color: " + this.color + ", Valor: " + this.value;
