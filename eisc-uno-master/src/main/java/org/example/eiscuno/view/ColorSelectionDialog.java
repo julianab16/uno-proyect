@@ -7,10 +7,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.StackPane;
 
+/**
+ * A custom dialog for selecting a color using a graphical color wheel.
+ * Extends JavaFX's Alert class to display a custom content with a color wheel.
+ */
 public class ColorSelectionDialog extends Alert {
 
     private String selectedColor;
 
+    /**
+     * Constructs a ColorSelectionDialog with a graphical color wheel.
+     * Initializes the dialog with a canvas displaying the color wheel and handles mouse click events to determine the selected color.
+     */
     public ColorSelectionDialog() {
         super(AlertType.CONFIRMATION);
         setTitle("Selecciona un color");
@@ -52,6 +60,11 @@ public class ColorSelectionDialog extends Alert {
         });
     }
 
+    /**
+     * Draws a color wheel on the provided GraphicsContext.
+     * @param gc The GraphicsContext to draw on
+     * @param radius The radius of the color wheel
+     */
     private void drawColorWheel(GraphicsContext gc, double radius) {
         double[] angles = {0, 90, 180, 270};
         Color[] colors = {Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW};
@@ -62,6 +75,10 @@ public class ColorSelectionDialog extends Alert {
         }
     }
 
+    /**
+     * Gets the color selected by the user.
+     * @return The selected color
+     */
     public String getSelectedColor() {
         return selectedColor;
     }

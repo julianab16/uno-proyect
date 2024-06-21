@@ -1,7 +1,6 @@
 package org.example.eiscuno.model.machine;
 
 import javafx.scene.image.ImageView;
-import org.example.eiscuno.controller.GameUnoController;
 import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
@@ -25,6 +24,16 @@ public class ThreadPlayMachine extends Thread {
     public AlertBox alertBox = new AlertBox();
     private volatile boolean running = true;
 
+    /**
+     * Constructor for initializing a ThreadPlayMachine instance with necessary game elements.
+     *
+     * @param table the game table instance
+     * @param machinePlayer the machine player instance
+     * @param tableImageView the ImageView representing the game table
+     * @param deck the game deck instance
+     * @param gameUno the GameUno instance
+     * @param humanPlayer the human player instance
+     */
     public ThreadPlayMachine(Table table, Player machinePlayer, ImageView tableImageView, Deck deck, GameUno gameUno, Player humanPlayer) {
         this.table = table;
         this.machinePlayer = machinePlayer;
@@ -34,6 +43,10 @@ public class ThreadPlayMachine extends Thread {
         this.humanPlayer = humanPlayer;
     }
 
+    /**
+     * Runs the thread to manage the machine player's turn.
+     * Loops while the game is running, waits for the player to play, then executes logic to place a card on the table.
+     */
     public void run() {
         while (running){
             if(hasPlayerPlayed){
@@ -52,6 +65,10 @@ public class ThreadPlayMachine extends Thread {
         }
     }
 
+    /**
+     * Places a card on the game table based on game logic.
+     * Checks for playable cards in the machine player's hand and handles special wild cards.
+     */
     private void putCardOnTheTable(){
         try {
             Card topCard = table.getCurrentCardOnTheTable();
@@ -96,6 +113,11 @@ public class ThreadPlayMachine extends Thread {
         }
     }
 
+    /**
+     * Selects the best color for wild cards based on the machine player's cards.
+     *
+     * @return the color chosen by the machine player
+     */
     private String chooseBestColor() {
         // Map to count cards per color
         Map<String, Integer> colorCount = new HashMap<>();
@@ -111,7 +133,6 @@ public class ThreadPlayMachine extends Thread {
                 colorCount.put(color, colorCount.get(color) + 1);
             }
         }
-
         // Find color with the most cards
         int maxCount = -1;
         String bestColor = "";
@@ -129,12 +150,23 @@ public class ThreadPlayMachine extends Thread {
         return bestColor;
     }
 
+    /**
+     * Checks if the machine player needs to say UNO and displays a message if true.
+     */
     public void unoMachine() {
         if (machinePlayer.getCardsPlayer().size() == 1) {
             alertBox.showMessage("Machina", "La maquina dijo ¡UNO! \uD83D\uDC40 ");
         }
     }
 
+    /**
+     * Handles special actions for wild cards played by the machine player.
+     * Depending on the card's value, performs actions such as skipping turns, reversing play, making players draw cards,
+     * or selecting the best color for the wild card.
+     *
+     * @param card the wild card being played
+     * @param player the player affected by the wild card (usually human player)
+     */
     public void isWildCards(Card card, Player player){
         if (card.getValue().equals("SKIP")) {
             System.out.println("\nLa máquina utilizó una carta de Skip.");
@@ -176,10 +208,21 @@ public class ThreadPlayMachine extends Thread {
         }
     }
 
+    /**
+     * Sets whether the player has played a card.
+     *
+     * @param hasPlayerPlayed true if the player has played a card, false otherwise
+     */
     public void setHasPlayerPlayed(boolean hasPlayerPlayed) {
         this.hasPlayerPlayed = hasPlayerPlayed;
     }
 
+    /**
+     * Checks if the game is running.
+     *
+     * @param running the running status of the game
+     * @return true if the game is running, false otherwise
+     */
     public boolean isRunning(boolean running) {
         return running;
     }

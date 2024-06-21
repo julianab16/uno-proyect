@@ -25,18 +25,16 @@ public class GameUnoStage extends Stage {
         try {
             root = loader.load();
         } catch (IOException e) {
-            // Re-throwing the caught IOException
             throw new IOException("Error while loading FXML file", e);
         }
         Scene scene = new Scene(root);
         getIcons().add(
                 new Image(
-                        String.valueOf(getClass().getResource("/org/example/eiscuno/cards-uno/deck_of_cards.png"))));
-        // Configuring the stage
-        setTitle("EISC Uno"); // Sets the title of the stage
-        setScene(scene); // Sets the scene for the stage
-        setResizable(false); // Disallows resizing of the stage
-        show(); // Displays the stage
+                        String.valueOf(getClass().getResource("/org/example/eiscuno/images/deck_of_cards.png"))));
+        setTitle("EISC Uno");
+        setScene(scene);
+        setResizable(false);
+        show();
     }
 
     /**

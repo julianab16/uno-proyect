@@ -49,61 +49,104 @@ public class Card {
         return card;
     }
 
+    /**
+     * Gets the ImageView representation of the card.
+     *
+     * @return the ImageView of the card
+     */
     public ImageView getCard() {
         return cardImageView;
     }
 
+    /**
+     * Gets the image of the card.
+     *
+     * @return the image of the card
+     */
     public Image getImage() {
         return image;
     }
 
+    /**
+     * Gets the value of the card.
+     *
+     * @return the value of the card
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Gets the color of the card.
+     *
+     * @return the color of the card
+     */
     public String getColor() {
         return color;
     }
 
+    /**
+     * Checks if the card is a reverse card.
+     * A reverse card's value starts with "RESERVE".
+     *
+     * @return true if the card is a reverse card, false otherwise
+     */
     public boolean isReverseCard() {
         return value.startsWith("RESERVE");
     }
 
+    /**
+     * Checks if the card is a skip card.
+     * A skip card's value starts with "SKIP".
+     *
+     * @return true if the card is a skip card, false otherwise
+     */
     public boolean isSkipCard() {
         return value.startsWith("SKIP");
     }
 
-    public boolean isTwoWildCrad(){
+
+    /**
+     * Checks if the card is a +2 wild card.
+     * A +2 wild card's value starts with "TWO_WILD_DRAW".
+     *
+     * @return true if the card is a +2 wild card, false otherwise
+     */
+    public boolean isTwoWildCard() {
         return value.startsWith("TWO_WILD_DRAW");
     }
 
+    /**
+     * Checks if the card is a wild card.
+     * A wild card's value is either "WILD" or "FOUR_WILD_DRAW".
+     *
+     * @return true if the card is a wild card, false otherwise
+     */
     public boolean isWildCard() {
         return value.equals("WILD") || value.equals("FOUR_WILD_DRAW");
     }
 
-    public String getWildCardName(Card card) {
-        String value = card.getValue();
-        if (value.startsWith("TWO_WILD_DRAW")) {
-            return "TWO_WILD_DRAW";
-        } else if(value.startsWith("SKIP")){
-            return "SKIP";
-        } else if (value.startsWith("RESERVE")) {
-            return "RESERVE";
-        } else {
-            return "NOT_WILD";
-        }
-    }
 
-
+    /**
+     * Returns a string representation of the card.
+     *
+     * @return a string representation of the card, showing its color and value
+     */
     @Override
     public String toString() {
-        return "Color: " + this.color + ", Valor: " + this.value;
+        return "Color: " + this.color + ", Value: " + this.value;
 
     }
 
+    /**
+     * Sets the color of the card.
+     *
+     * @param color the color to set for the card
+     */
     public void setColor(String color) {
         this.color = color;
     }
+
 }
 
 

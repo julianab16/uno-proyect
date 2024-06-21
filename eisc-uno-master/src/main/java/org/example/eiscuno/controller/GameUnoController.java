@@ -142,8 +142,15 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         }
     }
 
+    /**
+     * Checks if a card can be played as a number card.
+     * A card can be played as a number card if it is not a wild card, reverse card, skip card, or a +2 wild card.
+     *
+     * @param card the card to check
+     * @return true if the card can be played as a number card, false otherwise
+     */
     private boolean canPlayNumberCard(Card card) {
-        return !card.isWildCard() && !card.isReverseCard() && !card.isSkipCard()  &&!card.isTwoWildCrad();
+        return !card.isWildCard() && !card.isReverseCard() && !card.isSkipCard()  &&!card.isTwoWildCard();
     }
 
     /**
@@ -173,6 +180,13 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             printCardsHumanPlayer();
         }
     }
+
+    /**
+     * Handles the mouse entered event for the "Back" button.
+     * Applies a scale transform and a dark red drop shadow effect to the button.
+     *
+     * @param event the mouse event triggered when the mouse enters the "Back" button
+     */
     @FXML
     void onHandleMouseEnteredBack(MouseEvent event) {
         Scale scale = new Scale(1.1,1.1);
@@ -183,6 +197,12 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         buttonBack.setEffect(dropShadow);
     }
 
+    /**
+     * Handles the mouse exited event for the "Back" button.
+     * Clears the transform and effect applied to the button.
+     *
+     * @param event the mouse event triggered when the mouse exits the "Back" button
+     */
     @FXML
     void onHandleMouseExitedBack(MouseEvent event) {
         buttonBack.getTransforms().clear();
@@ -200,6 +220,13 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             printCardsHumanPlayer();
         }
     }
+
+    /**
+     * Handles the mouse entered event for the "Next" button.
+     * Applies a scale transform and a dark red drop shadow effect to the button.
+     *
+     * @param event the mouse event triggered when the mouse enters the "Next" button
+     */
     @FXML
     void onHandleMouseEnteredNext(MouseEvent event) {
         Scale scale = new Scale(1.1,1.1);
@@ -209,6 +236,13 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         dropShadow.setRadius(20);
         buttonNext.setEffect(dropShadow);
     }
+
+    /**
+     * Handles the mouse exited event for the "Next" button.
+     * Clears the transform and effect applied to the button.
+     *
+     * @param event the mouse event triggered when the mouse exits the "Next" button
+     */
     @FXML
     void onHandleMouseExitedNext(MouseEvent event) {
         buttonNext.getTransforms().clear();
@@ -235,6 +269,13 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             deck.refillDeckFromDiscardPile();
         }
     }
+
+    /**
+     * Handles the mouse entered event for the deck cards button.
+     * Applies a scale transform and a glow effect to the button.
+     *
+     * @param event the mouse event triggered when the mouse enters the deck cards button
+     */
     @FXML
     void onHandleMouseEnteredDeckCards(MouseEvent event) {
         Scale scale = new Scale(1.1,1.1);
@@ -243,6 +284,12 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         buttonDeckCards.setEffect(glow);
     }
 
+    /**
+     * Handles the mouse exited event for the deck cards button.
+     * Clears the transform and effect applied to the button.
+     *
+     * @param event the mouse event triggered when the mouse exits the deck cards button
+     */
     @FXML
     void onHandleMouseExitedDeckCards(MouseEvent event) {
         buttonDeckCards.getTransforms().clear();
@@ -272,6 +319,12 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         }
     }
 
+    /**
+     * Handles the mouse entered event for the "UNO" button.
+     * Applies a scale transform and a glow effect to the button.
+     *
+     * @param event the mouse event triggered when the mouse enters the "UNO" button
+     */
     @FXML
     void onHandleMouseEnteredUno(MouseEvent event) {
         Scale scale = new Scale(1.1,1.1);
@@ -280,12 +333,23 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         buttonUno.setEffect(glow);
     }
 
+    /**
+     * Handles the mouse exited event for the "UNO" button.
+     * Clears the transform and effect applied to the button.
+     *
+     * @param event the mouse event triggered when the mouse exits the "UNO" button
+     */
     @FXML
     void onHandleMouseExitedUno(MouseEvent event) {
         buttonUno.getTransforms().clear();
         buttonUno.setEffect(null);
     }
 
+    /**
+     * Method to handle the machine saying "UNO".
+     * Sets the machine's time to the current system time, marks that the machine said "UNO",
+     * and calls the checkUno method to determine who said it first.
+     */
     @Override
     public void onMachineSaysUno()  {
         machineTime = System.currentTimeMillis();
@@ -293,11 +357,23 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         checkUno();
     }
 
+    /**
+     * Handles the exit button click event.
+     * Deletes the GameUnoStage instance.
+     *
+     * @param event the action event triggered by clicking the exit button
+     */
     @FXML
     void OnHnableExitButton(ActionEvent event) {
         GameUnoStage.deleteInstance();
     }
 
+    /**
+     * Handles the mouse entered event for the button.
+     * Applies a scale transform and a white drop shadow effect to the button.
+     *
+     * @param event the mouse event triggered when the mouse enters the button
+     */
     @FXML
     void onHandleMouseEnteredOut(MouseEvent event) {
         Scale scale = new Scale(1.1,1.1);
@@ -308,12 +384,21 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         buttonOut.setEffect(dropShadow);
     }
 
+    /**
+     * Handles the mouse exited event for the button.
+     * Clears the transform and effect applied to the button.
+     *
+     * @param event the mouse event triggered when the mouse exits the button
+     */
     @FXML
     void onHandleMouseExitedOut(MouseEvent event) {
         buttonOut.getTransforms().clear();
         buttonOut.setEffect(null);
     }
 
+    /**
+     * Method to check who said "UNO" first.
+     */
     private void checkUno() {
         System.out.println("\nMaquina lo dijo en "+machineTime);
         System.out.println("\njugador lo dijo en "+playerTime);
@@ -331,11 +416,11 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                 System.out.println("\n¡Jugador dijo UNO más rápido!");
                 alertBox.showMessage("UNO", "¡Has dicho UNO más rápido! \uD83D\uDE04");
             }
+            machineTime = 0;
+            playerTime = 0;
+            machineSaidUno = false;
+            playerSaidUno = false;
         }
-        machineTime = 0;
-        playerTime = 0;
-        machineSaidUno = false;
-        playerSaidUno = false;
-        threadSingUNOMachine.setCondition(true);
+        threadSingUNOMachine.startThread();
     }
 }
