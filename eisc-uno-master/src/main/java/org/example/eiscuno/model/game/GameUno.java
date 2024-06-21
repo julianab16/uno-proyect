@@ -50,6 +50,7 @@ public class GameUno implements IGameUno {
         for (int i = 0; i < 5; i++) {
             humanPlayer.addCard(this.deck.takeCard());
             machinePlayer.addCard(this.deck.takeCard());
+            deck.discardCard(this.deck.takeCard());
         }
     }
 
@@ -155,8 +156,6 @@ public class GameUno implements IGameUno {
      */
     public boolean canPlayCard(Card card) {
         Card topCard = table.getCurrentCardOnTheTable();
-        System.out.println(topCard.getValue());
-        System.out.println(topCard.getColor());
 
         return card.getColor().equals(topCard.getColor()) ||
                 card.getValue().equals(topCard.getValue()) ||

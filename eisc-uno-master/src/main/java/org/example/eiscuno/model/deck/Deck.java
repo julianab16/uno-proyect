@@ -44,8 +44,6 @@ public class Deck {
                 if (value != null && color != null) {
                     Card card = new Card(cardEnum.getFilePath(), value, color);
                     deckOfCards.push(card);
-                    discardCard(card);
-
                 } else {
                     System.err.println("Invalid card configuration: " + cardEnum.name());
                 }
@@ -116,9 +114,12 @@ public class Deck {
      */
     public Card takeCard() {
         if (deckOfCards.isEmpty()) {
-            refillDeckFromDiscardPile();
             alertBox.showMessage("Mazo","El mazo fue llenado nuevamente");
-            throw new IllegalStateException("No hay más cartas en el mazo.");
+            if (discardPile.isEmpty()) {
+                throw new IllegalStateException("No hay más cartas en el mazo.");
+            } else {
+                    refillDeckFromDiscardPile();
+            }
         }
         return deckOfCards.pop();
     }
@@ -137,7 +138,7 @@ public class Deck {
      */
     public void refillDeckFromDiscardPile() {
         if (discardPile.isEmpty()) {
-            return;
+            throw new IllegalStateException("No hay más cartas en el mazo ni en la pila de descarte.");
         }
         Card lastDiscardedCard = discardPile.pop();
         while (!discardPile.isEmpty()) {

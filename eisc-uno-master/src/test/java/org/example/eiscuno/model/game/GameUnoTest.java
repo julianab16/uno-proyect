@@ -1,9 +1,8 @@
 package org.example.eiscuno.model.game;
 
 import javafx.stage.Stage;
-import org.example.eiscuno.controller.GameUnoController;
+import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
-import org.example.eiscuno.model.machine.ThreadPlayMachine;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +17,6 @@ class GameUnoTest extends ApplicationTest {
     private Deck deck;
     private Table table;
     private GameUno gameUno;
-    private ThreadPlayMachine threadPlayMachine;
-    private GameUnoController gameUnoController;
 
     @Override
     public void start(Stage stage) {
@@ -32,7 +29,7 @@ class GameUnoTest extends ApplicationTest {
         machinePlayer = new Player("MACHINE_PLAYER");
         deck = new Deck();
         table = new Table();
-        gameUno = new GameUno(humanPlayer, machinePlayer, deck, table, threadPlayMachine, gameUnoController);
+        gameUno = new GameUno(humanPlayer, machinePlayer, deck, table);
     }
 
     @Test

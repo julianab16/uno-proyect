@@ -88,7 +88,6 @@ public class ThreadPlayMachine extends Thread {
                 table.addCardOnTheTable(wildCard);
                 tableImageView.setImage(wildCard.getImage());
                 machinePlayer.getCardsPlayer().remove(wildCard);
-                deck.discardCard(fourCard);
                 isWildCards(fourCard, humanPlayer);
             }
             else {
@@ -104,7 +103,6 @@ public class ThreadPlayMachine extends Thread {
             }
             unoMachine();
             gameUno.postMoveActions(machinePlayer.getTypePlayer());
-            deck.discardCard(playableCard);
             System.out.println("\nCartas de la máquina: ");
             machinePlayer.printCardsPlayer();
         } catch (IndexOutOfBoundsException e) {

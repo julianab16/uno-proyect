@@ -66,10 +66,12 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     public void initialize() {
         initVariables();
         tableImageView.setImage(table.firstCard().getImage());
-
         printCardsHumanPlayer();
         this.gameUno.startGame();
         printCardsHumanPlayer();
+        this.gameUno.playCard(deck.takeCard());
+        this.tableImageView.setImage(this.table.getCurrentCardOnTheTable().getImage());
+
 
         threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer(),this);
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
@@ -118,7 +120,6 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                             threadPlayMachine.setHasPlayerPlayed(true);
                             gameUno.playCard(card);
                             printCardsHumanPlayer();
-                            deck.discardCard(card);
                             primeraCartaPuesta = true;
                             System.out.println("\nTus cartas: ");
                             humanPlayer.printCardsPlayer();
@@ -133,7 +134,6 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                         gameUno.isWildCards(card, threadPlayMachine, machinePlayer);
                         System.out.println("\nTus cartas: ");
                         humanPlayer.printCardsPlayer();
-                        deck.discardCard(card);
                     } else {
                         alertBox.showMessageError("Error", "Carta inválida. Intenta otra vez. \uD83C\uDCCF");
                     }
