@@ -226,4 +226,7 @@ public class ThreadPlayMachine extends Thread {
     public boolean isRunning(boolean running) {
         return running;
     }
+    public void stopThread() {
+        running = false;
+    }
 }

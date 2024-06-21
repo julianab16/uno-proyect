@@ -2,6 +2,7 @@ package org.example.eiscuno.model.table;
 
 import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
+import org.example.eiscuno.model.deck.Deck;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,7 @@ public class Table {
     private ArrayList<Card> cardsTable;
     private String currentColor;
     public AlertBox alertBox = new AlertBox();
+    private Deck deck = new Deck();
 
     /**
      * Constructs a new Table object with no cards on it.
@@ -58,5 +60,27 @@ public class Table {
         } else {
             return null;
         }
+    }
+
+
+    public ArrayList<Card> getCardsTable() {
+        return cardsTable;
+    }
+
+    public void setStartCard(Card card) {
+        this.cardsTable.add(card);
+    }
+
+    public Card firstCard() {
+        boolean t = true;
+        while (t) {
+            Card card = deck.takeCard();
+            if (!card.isWildCard() && !card.isReverseCard() && !card.isSkipCard() && !card.isTwoWildCard()) {
+                this.cardsTable.add(card);
+                t = false;
+                return card;
+            }
+        }
+        return null;
     }
 }

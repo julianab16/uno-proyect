@@ -65,6 +65,9 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     @FXML
     public void initialize() {
         initVariables();
+        tableImageView.setImage(table.firstCard().getImage());
+
+        printCardsHumanPlayer();
         this.gameUno.startGame();
         printCardsHumanPlayer();
 
@@ -109,7 +112,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             cardImageView.setOnMouseClicked((MouseEvent event) -> {
                 try {
                     if (!primeraCartaPuesta) {
-                        if (canPlayNumberCard(card)) {
+                        if (canPlayNumberCard(card) && gameUno.canPlayCard(card)) {
                             tableImageView.setImage(card.getImage());
                             humanPlayer.removeCard(findPosCardsHumanPlayer(card));
                             threadPlayMachine.setHasPlayerPlayed(true);
@@ -120,7 +123,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                             System.out.println("\nTus cartas: ");
                             humanPlayer.printCardsPlayer();
                         } else {
-                            alertBox.showMessageError("Error", "\"Para iniciar solo se permiten cartas de números y colores, no comodines, Reverse o Skip. \uD83C\uDCCF");
+                            alertBox.showMessageError("Error", "Carta inválida o solo se permiten cartas de números y colores, no Comodines, Reverse o Skip. \uD83C\uDCCF");
                         }
                     } else if (gameUno.canPlayCard(card)) {
                         humanPlayer.removeCard(findPosCardsHumanPlayer(card));
@@ -308,10 +311,8 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             playerTime = System.currentTimeMillis();
             playerSaidUno = true;
             checkUno();
-            // Aquí puedes añadir lógica adicional si hay reglas específicas para cuando se dice "UNO"
         } else {
             alertBox.showMessageError("Error", "No puedes decir 'UNO' porque no tienes exactamente una carta. Toma una carta como penitencia. \uD83D\uDE14");
-            // Penalización: por ejemplo, el jugador debe tomar 2 cartas
             gameUno.eatCard(humanPlayer, 1);
             printCardsHumanPlayer();
             System.out.println("\nTus cartas: ");

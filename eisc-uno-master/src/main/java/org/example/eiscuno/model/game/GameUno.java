@@ -1,8 +1,6 @@
 package org.example.eiscuno.model.game;
 
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.util.Duration;
 import org.example.eiscuno.controller.GameUnoController;
 import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
@@ -52,8 +50,6 @@ public class GameUno implements IGameUno {
         for (int i = 0; i < 5; i++) {
             humanPlayer.addCard(this.deck.takeCard());
             machinePlayer.addCard(this.deck.takeCard());
-            Card currentCard = deck.takeCard();
-            deck.discardCard(currentCard);
         }
     }
 
@@ -67,6 +63,7 @@ public class GameUno implements IGameUno {
     public void eatCard(Player player, int numberOfCards) {
         for (int i = 0; i < numberOfCards; i++) {
             player.addCard(this.deck.takeCard());
+            deck.discardCard(this.deck.takeCard());
         }
     }
 
@@ -143,7 +140,7 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void isGameOver() {
-        threadPlayMachine.isRunning(false);
+        threadPlayMachine.stopThread();
         System.out.println("\nFin de la partida!\n");
         Platform.runLater(() -> {
             GameUnoStage.deleteInstance();
@@ -157,7 +154,9 @@ public class GameUno implements IGameUno {
      * @return true si la carta puede ser jugada, false de lo contrario.
      */
     public boolean canPlayCard(Card card) {
-        Card topCard = table.getTopCard();
+        Card topCard = table.getCurrentCardOnTheTable();
+        System.out.println(topCard.getValue());
+        System.out.println(topCard.getColor());
 
         return card.getColor().equals(topCard.getColor()) ||
                 card.getValue().equals(topCard.getValue()) ||

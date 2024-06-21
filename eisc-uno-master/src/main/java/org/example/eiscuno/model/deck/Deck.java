@@ -44,6 +44,8 @@ public class Deck {
                 if (value != null && color != null) {
                     Card card = new Card(cardEnum.getFilePath(), value, color);
                     deckOfCards.push(card);
+                    discardCard(card);
+
                 } else {
                     System.err.println("Invalid card configuration: " + cardEnum.name());
                 }

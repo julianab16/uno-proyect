@@ -30,7 +30,7 @@ public class GameUnoStage extends Stage {
         Scene scene = new Scene(root);
         getIcons().add(
                 new Image(
-                        String.valueOf(getClass().getResource("/org/example/eiscuno/cards-uno/deck_of_cards.png"))));
+                        String.valueOf(getClass().getResource("/org/example/eiscuno/favicon.png"))));
         setTitle("EISC Uno");
         setScene(scene);
         setResizable(false);
