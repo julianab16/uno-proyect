@@ -67,6 +67,9 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         initVariables();
         this.gameUno.startGame();
         printCardsHumanPlayer();
+        this.gameUno.playCard(deck.takeCard());
+        this.tableImageView.setImage(this.table.getCurrentCardOnTheTable().getImage());
+
 
         threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer(),this);
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
