@@ -1,5 +1,8 @@
 package org.example.eiscuno.model.game;
 
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
+import javafx.util.Duration;
 import org.example.eiscuno.controller.GameUnoController;
 import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
@@ -7,6 +10,7 @@ import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.machine.ThreadPlayMachine;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
+import org.example.eiscuno.view.ColorSelectionDialog;
 import org.example.eiscuno.view.GameUnoStage;
 
 import java.util.Scanner;
@@ -20,8 +24,9 @@ public class GameUno implements IGameUno {
     private Player machinePlayer;
     private Deck deck;
     private Table table;
-    private GameUnoController gameUnoController = new GameUnoController();
     public AlertBox alertBox = new AlertBox();
+    private ThreadPlayMachine threadPlayMachine;
+    private GameUnoController gameUnoController;
 
     /**
      * Constructs a new GameUno instance.
@@ -31,11 +36,13 @@ public class GameUno implements IGameUno {
      * @param deck          The deck of cards used in the game.
      * @param table         The table where cards are placed during the game.
      */
-    public GameUno(Player humanPlayer, Player machinePlayer, Deck deck, Table table) {
+    public GameUno(Player humanPlayer, Player machinePlayer, Deck deck, Table table, ThreadPlayMachine threadPlayMachine,GameUnoController gameUnoController) {
         this.humanPlayer = humanPlayer;
         this.machinePlayer = machinePlayer;
         this.deck = deck;
         this.table = table;
+        this.threadPlayMachine = threadPlayMachine;
+        this.gameUnoController = gameUnoController;
     }
 
     /**
@@ -72,14 +79,21 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void playCard(Card card) {
-        // Determinar el tipo de jugador que está jugando la carta
         String playerType = humanPlayer.getTypePlayer();
         String playerMachine = machinePlayer.getTypePlayer();
-        // Agregar la carta a la mesa
         this.table.addCardOnTheTable(card);
-        // Realizar acciones posteriores al movimiento
         postMoveActions(playerType);
         postMoveActions(playerMachine);
+    }
+
+    private void openColorSelectionDialog(Card card) {
+        ColorSelectionDialog dialog = new ColorSelectionDialog();
+        dialog.setOnCloseRequest(event -> {
+            String selectedColor = dialog.getSelectedColor();
+            System.out.println("Elegiste: " + selectedColor);
+            card.setColor(selectedColor);
+        });
+        dialog.showAndWait();
     }
 
     /**
@@ -124,10 +138,12 @@ public class GameUno implements IGameUno {
      * @return True if the deck is empty, indicating the game is over; otherwise, false.
      */
     @Override
-    public Boolean isGameOver() {
-        GameUnoStage.deleteInstance();
-        ThreadPlayMachine.currentThread().interrupt();
-        return true;
+    public void isGameOver() {
+        threadPlayMachine.isRunning(false);
+        System.out.println("\nFin de la partida!\n");
+        Platform.runLater(() -> {
+            GameUnoStage.deleteInstance();
+        });
     }
 
     /**
@@ -140,24 +156,40 @@ public class GameUno implements IGameUno {
         Card topCard = table.getTopCard();
         return card.getColor().equals(topCard.getColor()) ||
                 card.getValue().equals(topCard.getValue()) ||
-                card.isWildCard();
+                card.getWildCardName(topCard).equals(topCard.getWildCardName(card)) || card.isWildCard();
     }
 
-    public void isWildCards(Card card, ThreadPlayMachine threadPlayMachine, Player player) {
-        if (card.getValue() == "SKIP") {
-            threadPlayMachine.setHasPlayerPlayed(false);
-            System.out.println("\nUtilizaste una carta de Skip.");
-        } else if (card.getValue() == "RESERVE") {
-            threadPlayMachine.setHasPlayerPlayed(false);
-            System.out.println("\nUtilizaste una carta de Reverse.");
-        } else if (card.getValue() == "TWO_WILD_DRAW") {
-            eatCard(player, 2);
-            System.out.println("\nUtilizasta un TWO_WILD_DRAW, " + player.getTypePlayer() + " comio 2 cartas");
-            threadPlayMachine.setHasPlayerPlayed(true);
-        } else if (card.getValue() == "WILD") {
 
-        } else if (card.getValue() == "FOUR_WILD_DRAW" || card.getValue() == "WILD") {
-        } else {
+    public void isWildCards(Card card, ThreadPlayMachine threadPlayMachine, Player player){
+        if (card.getValue() == "SKIP"){
+            System.out.println("\nUtilizaste una carta de Skip.");
+            threadPlayMachine.setHasPlayerPlayed(false);
+
+        } else if (card.getValue() =="RESERVE") {
+            System.out.println("\nUtilizaste una carta de Reverse.");
+            threadPlayMachine.setHasPlayerPlayed(false);
+
+        } else if (card.getValue() =="TWO_WILD_DRAW") {
+            eatCard(player, 2);
+            System.out.println("\nUtilizaste un TWO_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas");
+            System.out.println("\nCartas de la máquina: ");
+            machinePlayer.printCardsPlayer();
+            threadPlayMachine.setHasPlayerPlayed(true);
+
+        } else if (card.getValue() =="WILD") {
+            openColorSelectionDialog(card);//Falta que el color elegido por el jugador se use para que el jugador tenga que poner el mismo
+            System.out.println("\nUtilizaste un WILD, ");
+            threadPlayMachine.setHasPlayerPlayed(true);
+
+        }else if (card.getValue() == "FOUR_WILD_DRAW") {
+            eatCard(player, 4);
+            openColorSelectionDialog(card);//Falta que el color elegido por el jugador se use para que el jugador tenga que poner el mismo
+            System.out.println("\nUtilizaste un FOUR_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas");
+            System.out.println("\nCartas de la máquina: ");
+            machinePlayer.printCardsPlayer();
+            threadPlayMachine.setHasPlayerPlayed(true);
+        }
+        else {
             threadPlayMachine.setHasPlayerPlayed(true);
         }
     }
@@ -168,19 +200,19 @@ public class GameUno implements IGameUno {
      * @param playerType El tipo de jugador que realizó el movimiento.
      */
     public void postMoveActions(String playerType) {
+
         if (playerType.equals(humanPlayer.getTypePlayer())) {
             if (humanPlayer.getCardsPlayer().isEmpty()) {
                 alertBox.showMessage("GANADOR", "Has ganado! \uD83C\uDFC6");
-                System.out.println("\nFin de la partida!\n");
                 isGameOver();
             }
         } else if (playerType.equals(machinePlayer.getTypePlayer())) {
             if (machinePlayer.getCardsPlayer().isEmpty()) {
                 alertBox.showMessage("GAME OVER", "La maquina ha ganado! \uD83E\uDD16 ");
-                System.out.println("\nFin de la partida!\n");
                 isGameOver();
 
             }
         }
+
     }
 }

@@ -14,10 +14,15 @@ public class Card {
     private ImageView cardImageView;
 
     /**
-     * Constructs a Card with the specified image URL and name.
+     * Constructs a Card with the specified image URL, value, and color.
      *
+     <<<<<<< HEAD
      * @param url   the URL of the card image
      * @param value of the card
+    =======
+     * @param url the URL of the card image
+     * @param value the value of the card
+    >>>>>>> 9c100da4ee9edb264400c8aaa1f9292aad5a5b76
      * @param color the color of the card
      */
     public Card(String url, String value, String color) {
@@ -44,20 +49,10 @@ public class Card {
         return card;
     }
 
-    /**
-     * Gets the ImageView representation of the card.
-     *
-     * @return the ImageView of the card
-     */
     public ImageView getCard() {
         return cardImageView;
     }
 
-    /**
-     * Gets the image of the card.
-     *
-     * @return the Image of the card
-     */
     public Image getImage() {
         return image;
     }
@@ -71,22 +66,43 @@ public class Card {
     }
 
     public boolean isReverseCard() {
-        return value.equals("RESERVE");
+        return value.startsWith("RESERVE");
     }
 
     public boolean isSkipCard() {
-        return value.equals("SKIP");
+        return value.startsWith("SKIP");
+    }
+
+    public boolean isTwoWildCrad(){
+        return value.startsWith("TWO_WILD_DRAW");
     }
 
     public boolean isWildCard() {
-        return value.equals("WILD") || value.equals("FOUR_WILD_DRAW") || value.equals("TWO_WILD_DRAW");
-
+        return value.equals("WILD") || value.equals("FOUR_WILD_DRAW");
     }
+
+    public String getWildCardName(Card card) {
+        String value = card.getValue();
+        if (value.startsWith("TWO_WILD_DRAW")) {
+            return "TWO_WILD_DRAW";
+        } else if(value.startsWith("SKIP")){
+            return "SKIP";
+        } else if (value.startsWith("RESERVE")) {
+            return "RESERVE";
+        } else {
+            return "NOT_WILD";
+        }
+    }
+
 
     @Override
     public String toString() {
         return "Color: " + this.color + ", Valor: " + this.value;
 
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }
 

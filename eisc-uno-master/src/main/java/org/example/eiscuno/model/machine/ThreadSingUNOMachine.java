@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class ThreadSingUNOMachine implements Runnable {
     private ArrayList<Card> cardsPlayer;
-    boolean execute = true;
+    private volatile boolean execute = true;
 
     public ThreadSingUNOMachine(ArrayList<Card> cardsPlayer, ThreadSingUNOMachineI listener) {
         this.cardsPlayer = cardsPlayer;
@@ -23,11 +23,11 @@ public class ThreadSingUNOMachine implements Runnable {
     public void run() {
         while (execute) {
             try {
-                    Thread.sleep((long) (Math.random() * 5000));
-                    hasOneCardTheHumanPlayer();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Thread.currentThread().interrupt();
+                Thread.sleep((long) (Math.random() * 5000));
+                hasOneCardTheHumanPlayer();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -39,6 +39,7 @@ public class ThreadSingUNOMachine implements Runnable {
             execute = false;
         }
     }
+
     public void setCondition(boolean condition) {
         execute = condition;
     }
