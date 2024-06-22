@@ -85,6 +85,6 @@ public enum EISCUnoEnum {
      * @return the full file path of the image
      */
     public String getFilePath() {
-        return filePath;
+        return  filePath;
     }
 }

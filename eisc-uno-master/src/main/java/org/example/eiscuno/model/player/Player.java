@@ -14,10 +14,10 @@ public class Player implements IPlayer {
     /**
      * Constructs a new Player object with an empty hand of cards.
      */
-    public Player(String typePlayer){
+    public Player(String typePlayer) {
         this.cardsPlayer = new ArrayList<Card>();
         this.typePlayer = typePlayer;
-    };
+    }
 
     /**
      * Adds a card to the player's hand.
@@ -25,7 +25,7 @@ public class Player implements IPlayer {
      * @param card The card to be added to the player's hand.
      */
     @Override
-    public void addCard(Card card){
+    public void addCard(Card card) {
         cardsPlayer.add(card);
     }
 
@@ -56,11 +56,34 @@ public class Player implements IPlayer {
      * @return The card at the specified index in the player's hand.
      */
     @Override
-    public Card getCard(int index){
+    public Card getCard(int index) {
         return cardsPlayer.get(index);
     }
 
     public String getTypePlayer() {
         return typePlayer;
+    }
+
+    /**
+     * Finds a playable card that matches the current card's color or value.
+     *
+     * @param currentColor the color of the current card on the table
+     * @param currentValue the value of the current card on the table
+     * @return a playable card, or null if no card can be played
+     */
+    public Card findPlayableCard(String currentColor, String currentValue) {
+        for (Card card : cardsPlayer) {
+            if (card.getColor() != null && card.getValue() != null) {
+                if (card.getColor().equals(currentColor) || card.getValue().equals(currentValue)) {
+                    return card;
+                }
+            }
+        }
+        return null;
+    }
+    public void printCardsPlayer() {
+        for (Card card : this.cardsPlayer) {
+            System.out.println(card);
+        }
     }
 }
