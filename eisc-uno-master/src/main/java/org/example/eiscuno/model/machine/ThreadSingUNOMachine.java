@@ -51,7 +51,6 @@ public class ThreadSingUNOMachine implements Runnable {
             System.out.println(" UNO ");
             listener.onMachineSaysUno();
             execute = false;
-            //setCondition(false);
         }
     }
 

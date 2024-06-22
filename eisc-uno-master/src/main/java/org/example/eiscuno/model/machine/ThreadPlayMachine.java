@@ -92,14 +92,14 @@ public class ThreadPlayMachine extends Thread {
                 tableImageView.setImage(wildCard.getImage());
                 machinePlayer.getCardsPlayer().remove(wildCard);
                 gameUno.playCard(wildCard);
-                isWildCards(fourCard, humanPlayer);
+                isWildCardsMachine(fourCard, humanPlayer);
             }
             else {
                 if (playableCard != null) {
                     gameUno.playCard(playableCard);
                     tableImageView.setImage(playableCard.getImage());
                     machinePlayer.getCardsPlayer().remove(playableCard);
-                    isWildCards(playableCard, humanPlayer);
+                    isWildCardsMachine(playableCard, humanPlayer);
                 } else {
                     gameUno.eatCard(machinePlayer, 1);
                     alertBox.showMessage("Turno", "La máquina comió una carta, turno del jugador \uD83C\uDFC3");
@@ -169,7 +169,7 @@ public class ThreadPlayMachine extends Thread {
      * @param card the wild card being played
      * @param player the player affected by the wild card (usually human player)
      */
-    public void isWildCards(Card card, Player player){
+    public void isWildCardsMachine(Card card, Player player){
         if (card.getValue().equals("SKIP")) {
             System.out.println("\nLa máquina utilizó una carta de Skip.");
             setHasPlayerPlayed(true);
