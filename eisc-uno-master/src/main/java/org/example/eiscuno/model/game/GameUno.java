@@ -7,7 +7,6 @@ import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.machine.ThreadPlayMachine;
-import org.example.eiscuno.model.machine.ThreadSingUNOMachine;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.view.ColorSelectionDialog;
@@ -25,7 +24,6 @@ public class GameUno implements IGameUno {
     public AlertBox alertBox = new AlertBox();
     private ThreadPlayMachine threadPlayMachine;
     private GameUnoController gameUnoController;
-    private ThreadSingUNOMachine threadSingUNOMachine;
 
     /**
      * Constructs a new GameUno instance.
@@ -161,8 +159,6 @@ public class GameUno implements IGameUno {
      */
     public boolean canPlayCard(Card card) {
         Card topCard = table.getTopCard();
-        System.out.println(topCard.getValue());
-        System.out.println(topCard.getColor());
 
         return card.getColor().equals(topCard.getColor()) ||
                 card.getValue().equals(topCard.getValue()) ||

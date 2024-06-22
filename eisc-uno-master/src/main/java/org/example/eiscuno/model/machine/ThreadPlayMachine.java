@@ -85,18 +85,18 @@ public class ThreadPlayMachine extends Thread {
             Card wildCard = machinePlayer.findPlayableCard("NONE", "WILD");
 
             if (fourCard != null || wildCard != null) {
-                table.addCardOnTheTable(fourCard);
+                gameUno.playCard(fourCard);
                 tableImageView.setImage(fourCard.getImage());
                 machinePlayer.getCardsPlayer().remove(fourCard);
 
-                table.addCardOnTheTable(wildCard);
                 tableImageView.setImage(wildCard.getImage());
                 machinePlayer.getCardsPlayer().remove(wildCard);
+                gameUno.playCard(wildCard);
                 isWildCards(fourCard, humanPlayer);
             }
             else {
                 if (playableCard != null) {
-                    table.addCardOnTheTable(playableCard);
+                    gameUno.playCard(playableCard);
                     tableImageView.setImage(playableCard.getImage());
                     machinePlayer.getCardsPlayer().remove(playableCard);
                     isWildCards(playableCard, humanPlayer);
@@ -106,7 +106,6 @@ public class ThreadPlayMachine extends Thread {
                 }
             }
             unoMachine();
-            gameUno.postMoveActions(machinePlayer.getTypePlayer());
             System.out.println("\nCartas de la máquina: ");
             machinePlayer.printCardsPlayer();
         } catch (IndexOutOfBoundsException e) {

@@ -120,7 +120,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                             humanPlayer.printCardsPlayer();
 
                         } else {
-                            alertBox.showMessageError("Error", "Para iniciar solo se permiten cartas de números y colores, no comodines, Reverse o Skip. \uD83C\uDCCF");
+                            alertBox.showMessageError("Error", "Para iniciar solo se permiten cartas de números y colores, no comodines, Reverse o Skip o Carta inválida. \uD83C\uDCCF");
                         }
                     } else if (gameUno.canPlayCard(card)) {
                         humanPlayer.removeCard(findPosCardsHumanPlayer(card));
