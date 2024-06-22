@@ -109,6 +109,8 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                 try {
                     if (!primeraCartaPuesta) {
                         if (canPlayNumberCard(card) && gameUno.canPlayCard(card)) {
+                            primeraCartaPuesta = true;
+
                             tableImageView.setImage(card.getImage());
                             humanPlayer.removeCard(findPosCardsHumanPlayer(card));
                             threadPlayMachine.setHasPlayerPlayed(true);
@@ -116,10 +118,9 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                             printCardsHumanPlayer();
                             System.out.println("\nTus cartas: ");
                             humanPlayer.printCardsPlayer();
-                            primeraCartaPuesta = true;
 
                         } else {
-                            alertBox.showMessageError("Error", "\"Para iniciar solo se permiten cartas de números y colores, no comodines, Reverse o Skip. \uD83C\uDCCF");
+                            alertBox.showMessageError("Error", "Para iniciar solo se permiten cartas de números y colores, no comodines, Reverse o Skip. \uD83C\uDCCF");
                         }
                     } else if (gameUno.canPlayCard(card)) {
                         humanPlayer.removeCard(findPosCardsHumanPlayer(card));
