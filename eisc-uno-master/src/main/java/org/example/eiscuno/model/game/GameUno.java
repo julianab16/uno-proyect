@@ -1,3 +1,4 @@
+
 package org.example.eiscuno.model.game;
 
 import javafx.application.Platform;
@@ -6,6 +7,7 @@ import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.machine.ThreadPlayMachine;
+import org.example.eiscuno.model.machine.ThreadSingUNOMachine;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.view.ColorSelectionDialog;
@@ -23,6 +25,7 @@ public class GameUno implements IGameUno {
     public AlertBox alertBox = new AlertBox();
     private ThreadPlayMachine threadPlayMachine;
     private GameUnoController gameUnoController;
+    private ThreadSingUNOMachine threadSingUNOMachine;
 
     /**
      * Constructs a new GameUno instance.
@@ -52,6 +55,7 @@ public class GameUno implements IGameUno {
             machinePlayer.addCard(this.deck.takeCard());
             deck.discardCard(this.deck.takeCard());
         }
+
     }
 
     /**
@@ -75,6 +79,7 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void playCard(Card card) {
+        deck.discardCard(card);
         String playerType = humanPlayer.getTypePlayer();
         String playerMachine = machinePlayer.getTypePlayer();
         this.table.addCardOnTheTable(card);
@@ -155,7 +160,9 @@ public class GameUno implements IGameUno {
      * @return true si la carta puede ser jugada, false de lo contrario.
      */
     public boolean canPlayCard(Card card) {
-        Card topCard = table.getCurrentCardOnTheTable();
+        Card topCard = table.getTopCard();
+        System.out.println(topCard.getValue());
+        System.out.println(topCard.getColor());
 
         return card.getColor().equals(topCard.getColor()) ||
                 card.getValue().equals(topCard.getValue()) ||
@@ -190,14 +197,14 @@ public class GameUno implements IGameUno {
             threadPlayMachine.setHasPlayerPlayed(true);
 
         } else if (card.getValue() =="WILD") {
-            openColorSelectionDialog(card);
+            openColorSelectionDialog(card);//Falta que el color elegido por el jugador se use para que el jugador tenga que poner el mismo
             System.out.println("\nUtilizaste un WILD, ");
             threadPlayMachine.setHasPlayerPlayed(true);
 
         }else if (card.getValue() == "FOUR_WILD_DRAW") {
             eatCard(player, 4);
-            openColorSelectionDialog(card);
-            System.out.println("\nUtilizaste un FOUR_WILD_DRAW, " +player.getTypePlayer()+ " comio 4 cartas");
+            openColorSelectionDialog(card);//Falta que el color elegido por el jugador se use para que el jugador tenga que poner el mismo
+            System.out.println("\nUtilizaste un FOUR_WILD_DRAW, " +player.getTypePlayer()+ " comio 2 cartas");
             System.out.println("\nCartas de la máquina: ");
             machinePlayer.printCardsPlayer();
             threadPlayMachine.setHasPlayerPlayed(true);
@@ -225,6 +232,6 @@ public class GameUno implements IGameUno {
                 isGameOver();
             }
         }
-
     }
 }
+

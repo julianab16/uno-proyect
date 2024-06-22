@@ -11,16 +11,15 @@ import java.util.ArrayList;
  */
 public class Table {
     private ArrayList<Card> cardsTable;
-    private String currentColor;
     public AlertBox alertBox = new AlertBox();
-    private Deck deck = new Deck();
+    private Deck deck;
 
     /**
      * Constructs a new Table object with no cards on it.
      */
     public Table(){
         this.cardsTable = new ArrayList<>();
-        this.currentColor = null;
+        this.deck = new Deck();
     }
 
     /**
@@ -30,9 +29,6 @@ public class Table {
      */
     public void addCardOnTheTable(Card card){
         this.cardsTable.add(card);
-        if (!card.isWildCard()) {
-            this.currentColor = card.getColor();
-        }
     }
 
     /**
@@ -50,9 +46,9 @@ public class Table {
     }
 
     /**
-     * Retrieves the top card from the table.
+     * Retrieves the current card on the table.
      *
-     * @return The top card from the table, or null if the table is empty.
+     * @return The card currently on the table, or null if the table is empty.
      */
     public Card getTopCard() {
         if (!cardsTable.isEmpty()) {
@@ -62,28 +58,31 @@ public class Table {
         }
     }
 
-    public ArrayList<Card> getCardsTable() {
-        return cardsTable;
-    }
-
+    /**
+     * Adds a card to the end of the cardsTable.
+     *
+     * @param card The card to be added to the table.
+     */
     public void setStartCard(Card card) {
         this.cardsTable.add(card);
     }
 
+    /**
+     * Draws cards from the deck until it finds a valid card (not a special card)
+     * and places it on the table.
+     *
+     * @return The first valid card drawn and placed on the table.
+     */
     public Card firstCard() {
-        boolean t = true;
         while (true) {
-            Card card = deck.takeCard();
-            if (!card.isWildCard() && !card.isReverseCard() && !card.isSkipCard()  &&!card.isTwoWildCard()) {
-                System.out.println(card.isReverseCard());
-                System.out.println(card.isSkipCard());
-                System.out.println(card.isTwoWildCard());
-                System.out.println(card.isWildCard());
+            Card card = deck.takeCard(); // Tomar una carta del mazo
+            if (!card.isWildCard() && !card.isReverseCard() && !card.isSkipCard() && !card.isTwoWildCard()) {
                 System.out.println(card.getValue());
                 System.out.println(card.getColor());
-                t = false;
+                setStartCard(card); // Agregar la carta a la mesa
                 return card;
             }
         }
     }
 }
+

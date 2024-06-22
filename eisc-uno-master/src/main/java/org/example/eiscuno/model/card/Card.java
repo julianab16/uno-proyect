@@ -127,7 +127,7 @@ public class Card {
      */
     @Override
     public String toString() {
-        return "Color: " + this.color + ", Value: " + this.value;
+        return "Color: " + this.color + ", Valor: " + this.value;
     }
 
     /**
@@ -138,5 +138,4 @@ public class Card {
     public void setColor(String color) {
         this.color = color;
     }
-
 }

@@ -1,6 +1,8 @@
+
 package org.example.eiscuno.model.machine;
 
 import javafx.scene.image.ImageView;
+import org.example.eiscuno.controller.GameUnoController;
 import org.example.eiscuno.model.alertbox.AlertBox;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
@@ -23,6 +25,7 @@ public class ThreadPlayMachine extends Thread {
     private Deck deck;
     public AlertBox alertBox = new AlertBox();
     private volatile boolean running = true;
+    private GameUnoController gameUnoController;
 
     /**
      * Constructor for initializing a ThreadPlayMachine instance with necessary game elements.
@@ -34,13 +37,14 @@ public class ThreadPlayMachine extends Thread {
      * @param gameUno the GameUno instance
      * @param humanPlayer the human player instance
      */
-    public ThreadPlayMachine(Table table, Player machinePlayer, ImageView tableImageView, Deck deck, GameUno gameUno, Player humanPlayer) {
+    public ThreadPlayMachine(Table table, Player machinePlayer, ImageView tableImageView, Deck deck, GameUno gameUno, Player humanPlayer, GameUnoController gameUnoController) {
         this.table = table;
         this.machinePlayer = machinePlayer;
         this.tableImageView = tableImageView;
         this.deck = deck;
         this.gameUno = gameUno;
         this.humanPlayer = humanPlayer;
+        this.gameUnoController = gameUnoController;
     }
 
     /**
@@ -131,6 +135,7 @@ public class ThreadPlayMachine extends Thread {
                 colorCount.put(color, colorCount.get(color) + 1);
             }
         }
+
         // Find color with the most cards
         int maxCount = -1;
         String bestColor = "";
@@ -216,15 +221,12 @@ public class ThreadPlayMachine extends Thread {
     }
 
     /**
-     * Checks if the game is running.
-     *
-     * @param running the running status of the game
-     * @return true if the game is running, false otherwise
+     * Sets the 'running' flag to false, indicating that the thread should stop execution.
+     * This method is typically used to gracefully stop a running thread by setting a flag
+     * that the thread periodically checks during its execution.
      */
-    public boolean isRunning(boolean running) {
-        return running;
-    }
     public void stopThread() {
         running = false;
     }
+
 }

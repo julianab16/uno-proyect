@@ -23,8 +23,6 @@ import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.view.GameUnoStage;
 
-import java.io.IOException;
-
 /**
  * Controller class for the Uno game.
  */
@@ -33,7 +31,6 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     private GridPane gridPaneCardsPlayer;
     @FXML
     private ImageView tableImageView;
-
     @FXML
     private Button buttonBack;
     @FXML
@@ -66,19 +63,15 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     @FXML
     public void initialize() {
         initVariables();
-
-        this.tableImageView.setImage(this.table.firstCard().getImage());
-
-        printCardsHumanPlayer();
         this.gameUno.startGame();
         printCardsHumanPlayer();
-        this.gameUno.playCard(deck.takeCard());
+        this.tableImageView.setImage(this.table.firstCard().getImage());
 
         threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer(),this);
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
         t.start();
 
-        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView, this.deck, this.gameUno, this.humanPlayer);
+        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView, this.deck, this.gameUno, this.humanPlayer, this.gameUnoController);
         threadPlayMachine.start();
         System.out.println("Tus cartas: ");
         humanPlayer.printCardsPlayer();
@@ -95,7 +88,7 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         this.machinePlayer = new Player("MACHINE_PLAYER");
         this.deck = new Deck();
         this.table = new Table();
-        this.threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView, this.deck, this.gameUno, this.humanPlayer);
+        this.threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView, this.deck, this.gameUno, this.humanPlayer, this.gameUnoController);
         this.gameUno = new GameUno(this.humanPlayer, this.machinePlayer, this.deck, this.table,this.threadPlayMachine, this.gameUnoController);
         this.posInitCardToShow = 0;
     }
@@ -121,11 +114,12 @@ public class GameUnoController implements ThreadSingUNOMachineI {
                             threadPlayMachine.setHasPlayerPlayed(true);
                             gameUno.playCard(card);
                             printCardsHumanPlayer();
-                            primeraCartaPuesta = true;
                             System.out.println("\nTus cartas: ");
                             humanPlayer.printCardsPlayer();
+                            primeraCartaPuesta = true;
+
                         } else {
-                            alertBox.showMessageError("Error", "Carta inválida o solo se permiten cartas de números y colores, no Comodines, Reverse o Skip. \uD83C\uDCCF");
+                            alertBox.showMessageError("Error", "\"Para iniciar solo se permiten cartas de números y colores, no comodines, Reverse o Skip. \uD83C\uDCCF");
                         }
                     } else if (gameUno.canPlayCard(card)) {
                         humanPlayer.removeCard(findPosCardsHumanPlayer(card));
@@ -242,16 +236,17 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     }
 
     /**
-     * Handles the mouse exited event for the "Next" button.
-     * Clears the transform and effect applied to the button.
+     * Handles the mouse entered event for the "Next" button.
+     * Applies a scale transform and a dark red drop shadow effect to the button.
      *
-     * @param event the mouse event triggered when the mouse exits the "Next" button
+     * @param event the mouse event triggered when the mouse enters the "Next" button
      */
     @FXML
     void onHandleMouseExitedNext(MouseEvent event) {
         buttonNext.getTransforms().clear();
         buttonNext.setEffect(null);
     }
+
     /**
      * Handles the action of taking a card.
      *
@@ -288,12 +283,6 @@ public class GameUnoController implements ThreadSingUNOMachineI {
         buttonDeckCards.setEffect(glow);
     }
 
-    /**
-     * Handles the mouse exited event for the deck cards button.
-     * Clears the transform and effect applied to the button.
-     *
-     * @param event the mouse event triggered when the mouse exits the deck cards button
-     */
     @FXML
     void onHandleMouseExitedDeckCards(MouseEvent event) {
         buttonDeckCards.getTransforms().clear();
@@ -312,8 +301,10 @@ public class GameUnoController implements ThreadSingUNOMachineI {
             playerTime = System.currentTimeMillis();
             playerSaidUno = true;
             checkUno();
+            // Aquí puedes añadir lógica adicional si hay reglas específicas para cuando se dice "UNO"
         } else {
             alertBox.showMessageError("Error", "No puedes decir 'UNO' porque no tienes exactamente una carta. Toma una carta como penitencia. \uD83D\uDE14");
+            // Penalización: por ejemplo, el jugador debe tomar 2 cartas
             gameUno.eatCard(humanPlayer, 1);
             printCardsHumanPlayer();
             System.out.println("\nTus cartas: ");
@@ -322,10 +313,10 @@ public class GameUnoController implements ThreadSingUNOMachineI {
     }
 
     /**
-     * Handles the mouse entered event for the "UNO" button.
-     * Applies a scale transform and a glow effect to the button.
+     * Handles the mouse exited event for the deck cards button.
+     * Clears the transform and effect applied to the button.
      *
-     * @param event the mouse event triggered when the mouse enters the "UNO" button
+     * @param event the mouse event triggered when the mouse exits the deck cards button
      */
     @FXML
     void onHandleMouseEnteredUno(MouseEvent event) {
